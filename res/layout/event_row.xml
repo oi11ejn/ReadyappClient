@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Event title"
+        android:id="@+id/event_title"
+        android:textSize="16dp"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/event_image"
+        android:layout_toEndOf="@+id/event_image"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Event Duration"
+        android:id="@+id/event_duration"
+        android:layout_below="@+id/event_title"
+        android:layout_toRightOf="@+id/event_image"
+        android:layout_toEndOf="@+id/event_image"
+        android:textSize="16dp"
+        android:layout_marginLeft="10dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Event Location"
+        android:id="@+id/event_location"
+        android:layout_below="@+id/event_duration"
+        android:layout_alignRight="@+id/event_duration"
+        android:layout_alignEnd="@+id/event_duration"
+        android:textSize="16dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="10dp"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/event_image"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:src="@drawable/ic_launcher"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ready?"
+        android:id="@+id/ready_title"
+        android:textSize="16dp"
+        android:layout_above="@+id/event_duration"
+        android:layout_alignRight="@+id/no_radio_button"
+        android:layout_alignEnd="@+id/no_radio_button"
+        android:layout_marginRight="26dp"
+        android:layout_marginEnd="26dp"/>
+
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="YES"
+        android:id="@+id/yes_radio_button"
+        android:checked="false"
+        android:layout_gravity="center_horizontal"
+        android:layout_alignTop="@+id/event_duration"
+        android:layout_toLeftOf="@+id/no_radio_button"
+        android:layout_toStartOf="@+id/no_radio_button"/>/>
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="NO"
+        android:id="@+id/no_radio_button"
+        android:checked="false"
+        android:layout_gravity="right"
+        android:layout_below="@+id/ready_title"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"/>/>
+</RelativeLayout>
