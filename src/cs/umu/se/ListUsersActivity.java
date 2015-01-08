@@ -168,7 +168,7 @@ public class ListUsersActivity extends Activity {
             LayoutInflater inflater = (LayoutInflater) context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View rowView = inflater.inflate(R.layout.user_row, parent, false);
-            TextView textView = (TextView) rowView.findViewById(R.id.userinfo);
+            TextView textView = (TextView) rowView.findViewById(R.id.row_value);
             ImageView imageView = (ImageView) rowView.findViewById(R.id.icon);
             textView.setText(values.get(position));
 

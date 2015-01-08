@@ -1,9 +1,11 @@
 package cs.umu.se;
 
+import java.io.Serializable;
+
 /**
  * Created by oi11ejn on 2015-01-06.
  */
-public class Event {
+public class Event implements Serializable{
     private String eventName;
     private String location;
     private String duration;

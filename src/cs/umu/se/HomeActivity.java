@@ -22,9 +22,9 @@ import java.util.ArrayList;
 public class HomeActivity extends Activity {
 
     protected static String TAG = "HomeActivity";
-    UserInfo self;
-    ListView eventList;
-    ArrayList<Event> events;
+    protected UserInfo self;
+    protected ListView eventList;
+    protected ArrayList<Event> events;
 
     /**
      * Called when the activity is first created.
@@ -40,7 +40,8 @@ public class HomeActivity extends Activity {
             public void onItemClick(AdapterView<?> parent, View view,
                                     final int position, long id) {
                 //TODO: GOTO -> EVENT
-
+                Log.d(TAG, "klickar på event");
+                openEvent(events.get(position));
             }
         });
         events = new ArrayList<Event>();
@@ -53,15 +54,27 @@ public class HomeActivity extends Activity {
         //TODO: Add current events
         //Lägger till påhittade tills vidare
         //String eventName, String location, String duration, String description, String date, String created, Attendees[] attendees, String eventImage
-        Event event1 = new Event("Beach meetup", "Bettness", "11:00-16:00", "BADA!", "2015-01-08", "2015-01-06", null, "");
-        Event event2 = new Event("Hackathon", "MA436", "06:00-24:00", "Hacka, prata och clasha", "2015-01-13", "2015-01-03", null, "");
-        Event event3 = new Event();
-        Event event4 = new Event();
-        Event event5 = new Event();
-        Event event6 = new Event();
-        Event event7 = new Event();
-        Event event8 = new Event();
-        Event event9 = new Event();
+        Attendees[] temp = new Attendees[9];
+        for(int i = 0; i < 9; i++) {
+            Attendees member = new Attendees();
+            member.setUserId("stefan" + i);
+            if((i % 2) == 0) {
+                member.setReady(true);
+            } else {
+                member.setReady(false);
+            }
+            temp[i] = member;
+        }
+
+        Event event1 = new Event("Beach meetup", "Bettness", "11:00-16:00", "BADA!f sf asf safd sadf safd assdf saf saf asfd asdf sad fsa", "2015-01-08", "2015-01-06", temp, "");
+        Event event2 = new Event("Hackathon", "MA436", "06:00-24:00", "Hacka, prata och clasha", "2015-01-13", "2015-01-03", temp, "");
+        Event event3 = new Event("Beach meetup", "Bettness", "11:00-16:00", "BADA!", "2015-01-08", "2015-01-06", temp, "");
+        Event event4 = new Event("Beach meetup", "Bettness", "11:00-16:00", "BADA!", "2015-01-08", "2015-01-06", temp, "");
+        Event event5 = new Event("Beach meetup", "Bettness", "11:00-16:00", "BADA!", "2015-01-08", "2015-01-06", temp, "");
+        Event event6 = new Event("Beach meetup", "Bettness", "11:00-16:00", "BADA!", "2015-01-08", "2015-01-06", temp, "");
+        Event event7 = new Event("Beach meetup", "Bettness", "11:00-16:00", "BADA!", "2015-01-08", "2015-01-06", temp, "");
+        Event event8 = new Event("Beach meetup", "Bettness", "11:00-16:00", "BADA!", "2015-01-08", "2015-01-06", temp, "");
+        Event event9 = new Event("Beach meetup", "Bettness", "11:00-16:00", "BADA!", "2015-01-08", "2015-01-06", temp, "");
         events.add(event1);
         events.add(event2);
         events.add(event3);
@@ -107,6 +120,17 @@ public class HomeActivity extends Activity {
         }
     }
 
+    public void openEvent(Event event) {
+        try {
+            InternalStorage.writeObject(getApplicationContext(), "event", event);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Intent intent = new Intent(this, EventActivity.class);
+        startActivity(intent);
+    }
+
     public void openSearch() {
         Intent intent = new Intent(this, SearchActivity.class);
         startActivity(intent);
@@ -131,8 +155,8 @@ public class HomeActivity extends Activity {
         startActivity(intent);
     }
 
-    public void sendNotification(View view) {
-        Intent intent = new Intent(this, NotificationActivity.class);
+    public void createEventActivity() {
+        Intent intent = new Intent(this, CreateEventActivity.class);
         startActivity(intent);
     }
 

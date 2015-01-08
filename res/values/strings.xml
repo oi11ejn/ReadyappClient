@@ -14,7 +14,7 @@
     <string name="notification_title">Notification</string>
     <string name="profile_title">Profile</string>
     <string name="your_friend_title">Friends</string>
-
+    <string name="event_title">Ready friends</string>
     <!--test-->
     <string name="id_label">The ID is</string>
     <string name="id_value">[id]</string>
