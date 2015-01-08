@@ -3,7 +3,6 @@ package cs.umu.se;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 
 /**
  * Created by oi11ejn on 2015-01-05.
@@ -15,7 +14,7 @@ public class CreateEventActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.createEvent);
+        setContentView(R.layout.create_event);
         // If your minSdkVersion is 11 or higher, instead use:
         // to be able to go back
         getActionBar().setDisplayHomeAsUpEnabled(true);
