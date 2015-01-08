@@ -9,18 +9,17 @@ public class NewUser implements Serializable {
     String name;
     String lastName;
     String email;
-    String username;
+    String userId;
     String password;
 
     public NewUser() {
-
     }
 
-    public NewUser(String name, String lastName, String email, String username, String password) {
+    public NewUser(String name, String lastName, String email, String userId, String password) {
         this.name = name;
         this.lastName = lastName;
         this.email = email;
-        this.username = username;
+        this.userId = userId;
         this.password = password;
     }
 
@@ -36,8 +35,8 @@ public class NewUser implements Serializable {
         return email;
     }
 
-    public String getUsername() {
-        return username;
+    public String getUserId() {
+        return userId;
     }
 
     public String getPassword() {

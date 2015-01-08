@@ -7,12 +7,23 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.*;
-import android.widget.*;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import de.undercouch.bson4jackson.BsonFactory;
+import org.restlet.data.Reference;
+import org.restlet.representation.InputRepresentation;
+import org.restlet.representation.Representation;
+import org.restlet.resource.ClientResource;
 import org.springframework.http.*;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -44,6 +55,7 @@ public class HomeActivity extends Activity {
             }
         });
         events = new ArrayList<Event>();
+        restTestServer();
     }
 
     @Override
@@ -56,21 +68,10 @@ public class HomeActivity extends Activity {
         Event event1 = new Event("Beach meetup", "Bettness", "11:00-16:00", "BADA!", "2015-01-08", "2015-01-06", null, "");
         Event event2 = new Event("Hackathon", "MA436", "06:00-24:00", "Hacka, prata och clasha", "2015-01-13", "2015-01-03", null, "");
         Event event3 = new Event();
-        Event event4 = new Event();
-        Event event5 = new Event();
-        Event event6 = new Event();
-        Event event7 = new Event();
-        Event event8 = new Event();
-        Event event9 = new Event();
         events.add(event1);
         events.add(event2);
-        events.add(event3);
-        events.add(event4);
-        events.add(event5);
-        events.add(event6);
-        events.add(event7);
-        events.add(event8);
-        events.add(event9);
+        for(int i = 0; i < 5; i++)
+            events.add(event3);
         final MySimpleArrayAdapter adapter = new MySimpleArrayAdapter(this, events);
         eventList.setAdapter(adapter);
     }
@@ -118,7 +119,6 @@ public class HomeActivity extends Activity {
     }
 
     private void addFriend() {
-
     }
 
     private void listFriends() {
@@ -139,6 +139,39 @@ public class HomeActivity extends Activity {
     public void showProfile(View view) {
         Intent intent = new Intent(this, ProfileActivity.class);
         startActivity(intent);
+    }
+
+    public void restTest(View view) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    ClientResource client = new ClientResource("http://localhost:8080/");
+                    Reference uri = new Reference("http://localhost:8080/events");
+                    Event event = new Event("Beach meetup", "Bettness", "11:00-16:00", "BADA!", "2015-01-08", "2015-01-06", null, "");
+                    //serialize event
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    ObjectMapper mapper = new ObjectMapper(new BsonFactory());
+                    mapper.writeValue(baos, event);
+
+                    ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+                    Representation rep = new InputRepresentation(bais, org.restlet.data.MediaType.APPLICATION_OCTET_STREAM);
+
+                    client.setReference(uri);
+                    client.post(rep);
+                    Log.i(TAG, client.getStatus().toString());
+                } catch (IOException e) {
+                    Log.e(TAG, e.getMessage(), e);
+                }
+            }
+        }).start();
+    }
+
+    public void restTestServer() {
+        // use this to start and trigger a service
+        // potentially add data to the intent
+        Intent ServiceIntent = new Intent(this, RestService.class);
+        startService(ServiceIntent);
     }
 
     private class HttpRequestTask extends AsyncTask<Void, Void, String> {
@@ -162,7 +195,7 @@ public class HomeActivity extends Activity {
                 HttpHeaders requestHeader = createHeader();
                 HttpEntity entity = new HttpEntity(myIp, requestHeader);
                 ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
-                if(response.getStatusCode().equals(HttpStatus.CREATED)) {
+                if (response.getStatusCode().equals(HttpStatus.CREATED)) {
                     return "true";
                 }
             } catch (Exception e) {
@@ -173,7 +206,7 @@ public class HomeActivity extends Activity {
 
         @Override
         protected void onPostExecute(String bool) {
-            if(bool.equalsIgnoreCase("true")) {
+            if (bool.equalsIgnoreCase("true")) {
                 Log.d(TAG, "Ip posted successfully");
             } else {
                 Log.d(TAG, "Ip not posted");
@@ -193,18 +226,6 @@ public class HomeActivity extends Activity {
                 e.printStackTrace();
             }
             return null;
-        }
-    }
-
-    private class HttpRequestListener extends AsyncTask<Void, Void, String> {
-        @Override
-        protected String doInBackground(Void... params) {
-
-            return "hugo sucks";
-        }
-
-        @Override
-        protected void onPostExecute(String bool) {
         }
     }
 

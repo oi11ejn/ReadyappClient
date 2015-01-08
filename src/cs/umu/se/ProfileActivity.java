@@ -101,7 +101,7 @@ public class ProfileActivity extends Activity {
         public View getView(int position, View convertView, ViewGroup parent) {
             LayoutInflater inflater = (LayoutInflater) context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View rowView = inflater.inflate(R.layout.simple_row, parent, false);
+            View rowView = inflater.inflate(R.layout.user_row, parent, false);
             TextView textView = (TextView) rowView.findViewById(R.id.row_value);
             textView.setText(values.get(position));
 

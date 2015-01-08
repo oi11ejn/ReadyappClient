@@ -71,4 +71,14 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"/>
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="rest test"
+        android:id="@+id/rest_button"
+        android:onClick="restTest"
+        android:layout_alignTop="@+id/create_event_button"
+        android:layout_alignLeft="@+id/event_list"
+        android:layout_alignStart="@+id/event_list"/>
+
 </RelativeLayout>
