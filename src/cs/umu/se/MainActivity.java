@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 
 public class MainActivity extends Activity {
-    private static String TAG = "MainActivity";
+    private static final String TAG = "MainActivity";
 
     /**
      * Called when the activity is first created.

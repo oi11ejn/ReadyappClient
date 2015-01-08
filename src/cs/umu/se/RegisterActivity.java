@@ -10,12 +10,18 @@ import android.widget.EditText;
 import org.springframework.http.*;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.util.support.Base64;
 import org.springframework.web.client.RestTemplate;
+
+import java.io.IOException;
+import java.nio.charset.Charset;
 
 /**
  * Created by oi11ejn on 2015-01-02.
  */
 public class RegisterActivity extends Activity {
+
+    protected static String TAG = "RegisterActivity";
 
     /**
      * Called when the activity is first created.
@@ -43,39 +49,48 @@ public class RegisterActivity extends Activity {
                 EditText nameField = (EditText) findViewById(R.id.name);
                 EditText lastNameField = (EditText) findViewById(R.id.lastName);
                 EditText emailField = (EditText) findViewById(R.id.email);
-                EditText usernameField = (EditText) findViewById(R.id.user_id);
+                EditText userIdField = (EditText) findViewById(R.id.user_id);
                 EditText passwordField = (EditText) findViewById(R.id.password);
                 String name = nameField.getText().toString();
                 String lastName = lastNameField.getText().toString();
                 String email = emailField.getText().toString();
-                String username = usernameField.getText().toString();
+                String userId = userIdField.getText().toString();
                 String password = passwordField.getText().toString();
 
                 if(!(name.equalsIgnoreCase("") && lastName.equalsIgnoreCase("")
-                        && email.equalsIgnoreCase("") && username.equalsIgnoreCase("")
+                        && email.equalsIgnoreCase("") && userId.equalsIgnoreCase("")
                         && password.equalsIgnoreCase(""))) {
-                    NewUser user = new NewUser(name, lastName, email, username, password);
+                    Log.i(TAG, "testar: " + name + " sdsada " + userId);
+                    NewUser newUser = new NewUser(name, lastName, email, userId, password);
 
                     // Create a new RestTemplate instance
                     RestTemplate restTemplate = new RestTemplate();
-
-                    // Add the Jackson and String message converters
                     restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
                     restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
 
                     HttpHeaders requestHeaders = new HttpHeaders();
                     requestHeaders.setContentType(MediaType.APPLICATION_JSON);
 
-                    HttpEntity entity = new HttpEntity(user, requestHeaders);
+                    HttpEntity entity = new HttpEntity(newUser, requestHeaders);
 
-                    ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
+                    ResponseEntity<Void> response = restTemplate.exchange(url, HttpMethod.POST, entity, Void.class);
+//                    restTemplate.postForObject(url, user, String.class);
 
                     if(response.getStatusCode().equals(HttpStatus.CREATED)) {
+                        try {
+                            String auth = userId + ":" + password;
+                            byte[] encodedAuth = Base64.encodeBytesToBytes(auth.getBytes(Charset.forName("US-ASCII")));
+                            String authHeader = "Basic " + new String( encodedAuth );
+                            Authentication authentication = new Authentication(authHeader);
+                            InternalStorage.writeObject(getApplicationContext(), "auth", authentication);
+                        } catch(IOException e) {
+                            Log.e("MainActivity", e.getMessage(), e);
+                        }
                         return "true";
                     }
                 }
             } catch (Exception e) {
-                Log.e("RegisterActivity", e.getMessage(), e);
+                Log.e(TAG, e.getMessage(), e);
             }
 
             return "false";
@@ -84,12 +99,9 @@ public class RegisterActivity extends Activity {
         @Override
         protected void onPostExecute(String response) {
             if(response.equalsIgnoreCase("true")) {
-                System.out.println("Server sent following response: " + response);
                 //Ändra till att man kommer in till samma ruta som efter login om det gick bra.
 
-                //Anta att det går bra för nu, lägg till auth
-                //TODO: spara auth
-                Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
             }
         }

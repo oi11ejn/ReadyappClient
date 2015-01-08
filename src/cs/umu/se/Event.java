@@ -62,4 +62,18 @@ public class Event implements Serializable{
     public String getDescription() {
         return description;
     }
+
+//    public JSONObject toJSON() throws JSONException {
+//        JSONObject json = new JSONObject();
+//        json.put("eventName", eventName);
+//        json.put("location", location);
+//        json.put("duration", duration);
+//        json.put("description", description);
+//        json.put("date", date);
+//        json.put("created", created);
+//        json.put("attendes", attendees);
+//        json.put("eventImage", eventImage);
+//
+//        return json;
+//    }
 }
