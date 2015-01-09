@@ -72,11 +72,21 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="rest test"
-        android:id="@+id/rest_button"
+        android:text="rest post"
+        android:id="@+id/rest_post"
         android:onClick="restTest"
         android:layout_alignTop="@+id/create_event_button"
         android:layout_alignLeft="@+id/event_list"
         android:layout_alignStart="@+id/event_list"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="rest get"
+        android:id="@+id/rest_get"
+        android:onClick="updateEvents"
+        android:layout_alignBottom="@+id/rest_post"
+        android:layout_toRightOf="@+id/rest_post"
+        android:layout_toEndOf="@+id/rest_post"/>
 
 </RelativeLayout>

@@ -12,6 +12,7 @@ public class Event implements Serializable{
     private String description;
     private String date;
     private String created;
+    private String creator;
     private Attendees[] attendees;
     private String eventImage;
 
@@ -20,13 +21,14 @@ public class Event implements Serializable{
     }
 
 
-    public Event(String eventName, String location, String duration, String description, String date, String created, Attendees[] attendees, String eventImage) {
+    public Event(String eventName, String location, String duration, String description, String date, String created, String creator, Attendees[] attendees, String eventImage) {
         this.eventName = eventName;
         this.location = location;
         this.duration = duration;
         this.description = description;
         this.date = date;
         this.created = created;
+        this.creator = creator;
         this.attendees = attendees;
         this.eventImage = eventImage;
     }
@@ -62,6 +64,8 @@ public class Event implements Serializable{
     public String getDescription() {
         return description;
     }
+
+    public String getCreator() { return creator; }
 
 //    public JSONObject toJSON() throws JSONException {
 //        JSONObject json = new JSONObject();
