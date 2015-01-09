@@ -63,6 +63,8 @@ public class Event implements Serializable{
         return description;
     }
 
+    public void setAttendees(Attendees[] attendees) { this.attendees = attendees; }
+
 //    public JSONObject toJSON() throws JSONException {
 //        JSONObject json = new JSONObject();
 //        json.put("eventName", eventName);

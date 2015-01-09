@@ -18,6 +18,15 @@ public class CreateEventActivity extends Activity {
         // If your minSdkVersion is 11 or higher, instead use:
         // to be able to go back
         getActionBar().setDisplayHomeAsUpEnabled(true);
+
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1) {
+            if(resultCode == RESULT_OK) {
+                data.get
+            }
+        }
     }
 
     public void addFriendsActivity() {
@@ -25,5 +34,8 @@ public class CreateEventActivity extends Activity {
         startActivity(intent);
     }
 
+    public void createEvent() {
+
+    }
 
 }
