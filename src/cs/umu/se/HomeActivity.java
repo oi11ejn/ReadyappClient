@@ -181,19 +181,23 @@ public class HomeActivity extends Activity {
             @Override
             public void run() {
                 try {
-                    ClientResource client = new ClientResource("http://localhost:8080/");
-                    Reference uri = new Reference("http://localhost:8080/events");
+                    Log.d(TAG,"1");
+                    ClientResource client = new ClientResource("http://130.239.40.172:8080/");
+                    Log.d(TAG,"2");
+                    client.setReference("http://130.239.40.172:8080/events");
+                    Log.d(TAG,"3");
                     Event event = new Event("Beach meetup", "Bettness", "11:00-16:00", "BADA!", "2015-01-08", "2015-01-06", null, "");
                     //serialize event
                     ByteArrayOutputStream baos = new ByteArrayOutputStream();
                     ObjectMapper mapper = new ObjectMapper(new BsonFactory());
                     mapper.writeValue(baos, event);
+                    Log.d(TAG,"4");
 
                     ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
                     Representation rep = new InputRepresentation(bais, org.restlet.data.MediaType.APPLICATION_OCTET_STREAM);
-
-                    client.setReference(uri);
+                    Log.d(TAG,"5");
                     client.post(rep);
+                    Log.d(TAG,"6");
                     Log.i(TAG, client.getStatus().toString());
                 } catch (IOException e) {
                     Log.e(TAG, e.getMessage(), e);

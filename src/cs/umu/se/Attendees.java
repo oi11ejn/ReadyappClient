@@ -14,6 +14,12 @@ public class Attendees implements Serializable {
 
     }
 
+    public Attendees(String userId, boolean leader) {
+        this.userId = userId;
+        this.leader = leader;
+        ready = false;
+    }
+
     public String getUserId() {
         return userId;
     }

@@ -1,6 +1,7 @@
 package cs.umu.se;
 
 import java.io.Serializable;
+import java.util.HashMap;
 
 /**
  * Created by oi11ejn on 2014-12-30.
@@ -13,6 +14,7 @@ public class UserInfo implements Serializable {
     private String email;
     private String profilePicture;
     private UserId[] friendList;
+    private HashMap<String, String> UserIP;
     private String lastOnline;
     private boolean yourFriend;
 

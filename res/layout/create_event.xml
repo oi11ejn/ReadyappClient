@@ -52,14 +52,23 @@
         android:layout_height="wrap_content"
         android:inputType="time"
         android:ems="10"
-        android:id="@+id/time_value"
-        android:hint="Time"
+        android:id="@+id/date_value"
+        android:hint="Date"
         android:focusableInTouchMode="false"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="270dp"/>
 
+    <EditText
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/duration_value"
+            android:hint="Duration"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="270dp"/>
     <EditText
         android:layout_width="300dp"
         android:layout_height="wrap_content"
