@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.util.Log;
 import org.restlet.Component;
 import org.restlet.data.Protocol;
-import org.restlet.routing.Router;
 
 /**
  * Created by oi11ejn on 2015-01-07.
@@ -23,8 +22,8 @@ public class RestService extends IntentService {
             Log.d(TAG, "Server started");
             Component serverComponent = new Component();
             serverComponent.getServers().add(Protocol.HTTP, 8080);
-            final Router router = new Router(serverComponent.getContext().createChildContext());
-            router.attach("/event", MyServerResource.class);
+//            final Router router = new Router(serverComponent.getContext().createChildContext());
+//            router.attach("/event", MyServerResource.class);
             serverComponent.getDefaultHost().attach(new ReadyappResourceApplication());
             serverComponent.start();
             Log.d("Server", "Server INITIATED HAX: " + serverComponent.getDefaultHost().getServerAddress());

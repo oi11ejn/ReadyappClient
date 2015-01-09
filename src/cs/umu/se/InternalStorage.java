@@ -9,7 +9,8 @@ import java.io.*;
  */
 public final class InternalStorage {
 
-    private InternalStorage() {}
+
+    private InternalStorage() { }
 
     public static void writeObject(Context context, String key, Object object) throws IOException {
         FileOutputStream fos = context.openFileOutput(key, Context.MODE_PRIVATE);
