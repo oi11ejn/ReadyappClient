@@ -1,7 +1,6 @@
 package cs.umu.se;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 
 /**
@@ -20,10 +19,10 @@ public class CreateEventActivity extends Activity {
         getActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
-    public void addFriendsActivity() {
-        Intent intent = new Intent(this, AddFriendsActivity.class);
-        startActivity(intent);
-    }
+//    public void addFriendsActivity() {
+//        Intent intent = new Intent(this, AddFriendsActivity.class);
+//        startActivity(intent);
+//    }
 
 
 }
