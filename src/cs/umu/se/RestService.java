@@ -21,7 +21,7 @@ public class RestService extends IntentService {
         try {
             Log.d(TAG, "Server started");
             Component serverComponent = new Component();
-            serverComponent.getServers().add(Protocol.HTTP, 8080);
+            serverComponent.getServers().add(Protocol.HTTP, 8081);
 //            final Router router = new Router(serverComponent.getContext().createChildContext());
 //            router.attach("/event", MyServerResource.class);
             serverComponent.getDefaultHost().attach(new ReadyappResourceApplication());

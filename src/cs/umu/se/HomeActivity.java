@@ -11,19 +11,11 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import de.undercouch.bson4jackson.BsonFactory;
-import org.restlet.data.Reference;
-import org.restlet.representation.InputRepresentation;
-import org.restlet.representation.Representation;
-import org.restlet.resource.ClientResource;
 import org.springframework.http.*;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -57,6 +49,12 @@ public class HomeActivity extends Activity {
             }
         });
         events = new ArrayList<Event>();
+        HashMap<String, String> ips = new HashMap<String, String>();
+        try {
+            InternalStorage.writeObject(getApplicationContext(), "ips", ips);
+        } catch (IOException e) {
+            Log.e(TAG, e.getMessage(), e);
+        }
         restTestServer();
     }
 
@@ -116,6 +114,11 @@ public class HomeActivity extends Activity {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
+    }
+
+    public void createEvent(View view) {
+        Intent intent = new Intent(this, CreateEventActivity.class);
+        startActivity(intent);
     }
 
     @Override
@@ -184,41 +187,40 @@ public class HomeActivity extends Activity {
         startActivity(intent);
     }
 
-    public void createEventActivity(View view) {
-        Intent intent = new Intent(this, CreateEventActivity.class);
-        startActivity(intent);
-    }
-
     public void showProfile(View view) {
         Intent intent = new Intent(this, ProfileActivity.class);
         startActivity(intent);
     }
 
     public void restTest(View view) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    ClientResource client = new ClientResource("http://10.0.2.2:8080/");
-                    Reference uri = new Reference("http://10.0.2.2:8080/events");
-                    Event event = new Event("Beach meetup", "Bettness", "11:00-16:00", "BADA!", "2015-01-08", "2015-01-06", "berra", null, "", "");
-//                    event.incrementClock("berra");
-                    //serialize event
-                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                    ObjectMapper mapper = new ObjectMapper(new BsonFactory());
-                    mapper.writeValue(baos, event);
-
-                    ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
-                    Representation rep = new InputRepresentation(bais, org.restlet.data.MediaType.APPLICATION_OCTET_STREAM);
-
-                    client.setReference(uri);
-                    client.post(rep);
-                    Log.i(TAG, client.getStatus().toString());
-                } catch (IOException e) {
-                    Log.e(TAG, e.getMessage(), e);
-                }
-            }
-        }).start();
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                try {
+//                    ClientResource client = new ClientResource("http://10.0.2.2:8080/");
+//                    Reference uri = new Reference("http://10.0.2.2:8080/events");
+////                    event.incrementClock("berra");
+//                    //serialize event
+//                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//                    ObjectMapper mapper = new ObjectMapper(new BsonFactory());
+//                    mapper.writeValue(baos, event);
+//
+//                    ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+//                    Representation rep = new InputRepresentation(bais, org.restlet.data.MediaType.APPLICATION_OCTET_STREAM);
+//
+//                    client.setReference(uri);
+//                    client.post(rep);
+//                    Log.i(TAG, client.getStatus().toString());
+//                } catch (IOException e) {
+//                    Log.e(TAG, e.getMessage(), e);
+//                }
+//            }
+//        }).start();
+        Attendees[] attendees = new Attendees[1];
+        Attendees a = new Attendees("berra", false);
+        attendees[0] = a;
+        Event event = new Event("Beach meetup", "Bettness", "11:00-16:00", "BADA!", "2015-01-08", "2015-01-06", "berra", null, "");
+        Sender.send(attendees, event, "post");
     }
 
 //    public void restGet(View view) {

@@ -4,15 +4,13 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import org.springframework.core.io.Resource;
+import android.widget.ToggleButton;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -32,7 +30,7 @@ public class EventActivity extends Activity {
         setContentView(R.layout.event);
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
-        friendsInEventList = (ListView) findViewById(R.id.friend_inEvent);
+        friendsInEventList = (ListView) findViewById(R.id.friend_in_event);
         list = new ArrayList<Attendees>();
     }
 
@@ -69,6 +67,17 @@ public class EventActivity extends Activity {
         friendsInEventList.setAdapter(adapter);
 //            }
 //        }).start();
+    }
+
+    public void sendReady(View view) {
+        ToggleButton ready = (ToggleButton) findViewById(R.id.ready_button);
+        if(ready.isChecked()) {
+            //if not creator post ready to creator
+
+        } else {
+            //if not creator post not ready to creator
+
+        }
     }
 
 

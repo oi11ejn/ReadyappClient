@@ -31,7 +31,7 @@ public class ProfileActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.profile);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getActionBar().setDisplayHomeAsUpEnabled(false);
 
         list = new ArrayList<String>();
         friendList = (ListView) findViewById(R.id.friend_list);

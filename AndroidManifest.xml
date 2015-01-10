@@ -34,7 +34,7 @@
             <activity
                 android:name=".HomeActivity"
                 android:label="Events"
-                android:launchMode="singleTop"
+                android:launchMode="singleTask"
                 android:parentActivityName=".MainActivity" >
                 <meta-data
                     android:name="android.support.PARENT_ACTIVITY"
@@ -75,6 +75,7 @@
             <activity
                 android:name=".ProfileActivity"
                 android:label="@string/profile_title"
+                android:launchMode="singleTask"
                 android:parentActivityName=".HomeActivity" >
                 <meta-data
                     android:name="android.support.PARENT_ACTIVITY"
