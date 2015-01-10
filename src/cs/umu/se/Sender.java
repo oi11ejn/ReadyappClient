@@ -30,6 +30,9 @@ public class Sender {
                 try {
                     HashMap<String, String> ips = (HashMap<String, String>) InternalStorage.readObject(HomeActivity.ha.getApplicationContext(), "ips");
                     Boolean send;
+                    for (Attendees attendee : attendees)
+                        Log.d(TAG, "RECIPIENT " + attendee.getUserId());
+
                     for (Attendees attendee : attendees) {
                         send = false;
                         if (!ips.containsKey(attendee.getUserId())) {

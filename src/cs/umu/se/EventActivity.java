@@ -86,6 +86,11 @@ public class EventActivity extends Activity {
         startActivity(intent);
     }
 
+    public void showProfile(View view) {
+        Intent intent = new Intent(this, ProfileActivity.class);
+        startActivity(intent);
+    }
+
     private class MySimpleArrayAdapter extends ArrayAdapter<Attendees> {
         private final Context context;
         private final ArrayList<Attendees> values;

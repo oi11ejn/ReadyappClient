@@ -29,6 +29,16 @@ public class CreateEventActivity extends Activity {
         friendsToInviteIDs = new ArrayList<String>();
     }
 
+    public void showProfile(View view) {
+        Intent intent = new Intent(this, ProfileActivity.class);
+        startActivity(intent);
+    }
+
+    public void showEvents(View view) {
+        Intent intent = new Intent(this, HomeActivity.class);
+        startActivity(intent);
+    }
+
     public void addFriendsActivity(View view) {
 
         EditText titleView = (EditText)findViewById(R.id.title_value);

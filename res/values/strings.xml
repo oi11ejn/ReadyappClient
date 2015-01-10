@@ -9,6 +9,7 @@
     <string name="search_title">Search</string>
     <string name="result_title">Search result</string>
     <string name="friend_title">Friends</string>
+    <string name="add_friend_title">Add friends</string>
     <string name="register_title">Register</string>
     <string name="settings_title">Settings</string>
     <string name="notification_title">Notification</string>

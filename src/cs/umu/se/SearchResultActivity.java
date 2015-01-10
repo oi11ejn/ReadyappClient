@@ -26,7 +26,7 @@ public class SearchResultActivity extends Activity {
     private static final String TAG = "SearchResultActivity";
     protected String message;
     protected ListView friendList;
-    protected ImageButton addButton;
+    protected Button addButton;
     protected UserInfo friend;
     protected UserInfo self;
     protected ArrayList<UserId> friends;
@@ -51,7 +51,7 @@ public class SearchResultActivity extends Activity {
             }
         });
 
-        addButton = (ImageButton) findViewById(R.id.add_friend_button);
+        addButton = (Button) findViewById(R.id.add_friend_button);
     }
 
     @Override
@@ -66,6 +66,17 @@ public class SearchResultActivity extends Activity {
             Log.e(TAG, e.getMessage(), e);
         }
         new HttpRequestTask().execute();
+
+    }
+
+    public void showProfile(View view) {
+        Intent intent = new Intent(this, ProfileActivity.class);
+        startActivity(intent);
+    }
+
+    public void showEvents(View view) {
+        Intent intent = new Intent(this, HomeActivity.class);
+        startActivity(intent);
     }
 
     public void addFriend(View view) {
@@ -83,7 +94,7 @@ public class SearchResultActivity extends Activity {
                 restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
                 HttpHeaders requestHeader = createHeader();
                 HttpEntity entity = new HttpEntity(requestHeader);
-                Log.d("SearchResultActivity", "Trying to get: " + message);
+                Log.d(TAG, "Trying to get: " + message);
                 ResponseEntity<UserInfo> response = restTemplate.exchange(url, HttpMethod.GET, entity, UserInfo.class);
                 if(response.getStatusCode().equals(HttpStatus.OK)) {
                     return response.getBody();
@@ -112,6 +123,7 @@ public class SearchResultActivity extends Activity {
                 lastOnline.setText("Last online at\n" + userinfo.getLastOnline());
                 enableAddButton(!checkFriend(userinfo.getUserId()));
                 friends.clear();
+                list.clear();
                 for (UserId user : userinfo.getFriendList()) {
                     friends.add(user);
                     list.add(user.toString());
@@ -150,10 +162,10 @@ public class SearchResultActivity extends Activity {
         protected void enableAddButton(boolean bool) {
             if(bool) {
                 addButton.setEnabled(true);
-                addButton.setImageResource(R.drawable.ic_action_user_add);
+                addButton.setText("Add");
             } else {
                 addButton.setEnabled(false);
-                addButton.setImageResource(R.drawable.ic_action_user);
+                addButton.setText("Added");
             }
         }
     }

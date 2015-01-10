@@ -33,6 +33,6 @@ public class User implements Serializable {
     }
 
     public String toString() {
-        return "Username: " + userId + "\nLast online: " + lastOnline + "\nYour friend: " + yourFriend;
+        return "Username: " + userId + "\nLast online: " + lastOnline;
     }
 }
