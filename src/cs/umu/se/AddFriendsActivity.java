@@ -9,23 +9,22 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.*;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import de.undercouch.bson4jackson.BsonFactory;
-import org.restlet.representation.InputRepresentation;
-import org.restlet.representation.Representation;
-import org.restlet.resource.ClientResource;
+import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.ListView;
+import android.widget.TextView;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.TimeZone;
 
 /**
  * Created by oi11msd on 2015-01-08.
  */
 public class AddFriendsActivity extends Activity{
-    protected static String TAG = "addFriendsActivity";
+    protected static String TAG = "AddFriendsActivity";
     protected ListView friends;
     protected ArrayList<String> list;
     protected ArrayList<Boolean> test = new ArrayList<Boolean>();
@@ -81,6 +80,17 @@ public class AddFriendsActivity extends Activity{
 //        }).start();
     }
 
+    public void showProfile(View view) {
+        Intent intent = new Intent(this, ProfileActivity.class);
+        startActivity(intent);
+    }
+
+    public void showEvents(View view) {
+        Intent intent = new Intent(this, HomeActivity.class);
+        startActivity(intent);
+    }
+
+
     public void createEvent(View view) {
         String eventTitle = getIntent().getStringExtra("title");
         String eventDate = getIntent().getStringExtra("date");
@@ -103,12 +113,15 @@ public class AddFriendsActivity extends Activity{
                 Log.d(TAG, "Lägger ej till: " + name);
             }
         }
+        for (String id : friendsToInviteIDs) {
+            Log.d(TAG, "KOMpISAR SOM SKA ME " + id);
+        }
 
         Attendees[] attendees = new Attendees[friendsToInviteIDs.size() + 1];
         for(int i = 0; i < friendsToInviteIDs.size(); i++) {
             attendees[i] = new Attendees(friendsToInviteIDs.get(i), false);
         }
-        UserInfo self = new UserInfo();
+        UserInfo self = null;
         try {
             self  = (UserInfo) InternalStorage.readObject(getApplicationContext(), "self");
             attendees[friendsToInviteIDs.size()] = new Attendees(self.getUserId(), true);
@@ -120,34 +133,36 @@ public class AddFriendsActivity extends Activity{
         Calendar date1 = Calendar.getInstance(TimeZone.getDefault());
         Date date2 = date1.getTime();
         Event event = new Event(eventTitle, eventLocation, eventDuration, eventDescription, eventDate, date2.toString(), self.getUserId() ,attendees, "IMAGE", eventTime);
+        Sender.send(attendees, event, "post");
 
-        HashMap<String, String> friendsToInviteIPs = new HashMap<String, String>();
-        try {
-            friendsToInviteIPs = (HashMap<String, String>) InternalStorage.readObject(getApplicationContext(), "friendsIPs");
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        for(int i = 0; i < friendsToInviteIDs.size(); i++) {
-            String friendToAddIP = friendsToInviteIPs.get(friendsToInviteIDs.get(i));
+//        HashMap<String, String> friendsToInviteIPs = new HashMap<String, String>();
+//        try {
+//            friendsToInviteIPs = (HashMap<String, String>) InternalStorage.readObject(getApplicationContext(), "friendsIPs");
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        } catch (ClassNotFoundException e) {
+//            e.printStackTrace();
+//        }
+//        for(int i = 0; i < friendsToInviteIDs.size(); i++) {
+//            String friendToAddIP = friendsToInviteIPs.get(friendsToInviteIDs.get(i));
+//
+//            ClientResource client = new ClientResource("http://" + friendToAddIP + ":8080/events/");
+//
+//            try {
+//                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//                ObjectMapper mapper = new ObjectMapper(new BsonFactory());
+//
+//                mapper.writeValue(baos, event);
+//
+//                ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+//                Representation rep = new InputRepresentation(bais, org.restlet.data.MediaType.APPLICATION_OCTET_STREAM);
+//                client.post(rep);
+//                Log.i(TAG, client.getStatus().toString());
+//            } catch (IOException e) {
+//                Log.e(TAG, e.getMessage(), e);
+//            }
+//        }
 
-            ClientResource client = new ClientResource("http://" + friendToAddIP + ":8080/events/");
-
-            try {
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                ObjectMapper mapper = new ObjectMapper(new BsonFactory());
-
-                mapper.writeValue(baos, event);
-
-                ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
-                Representation rep = new InputRepresentation(bais, org.restlet.data.MediaType.APPLICATION_OCTET_STREAM);
-                client.post(rep);
-                Log.i(TAG, client.getStatus().toString());
-            } catch (IOException e) {
-                Log.e(TAG, e.getMessage(), e);
-            }
-        }
     }
 
     private class MySimpleArrayAdapter extends ArrayAdapter<String> {

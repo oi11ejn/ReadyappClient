@@ -74,6 +74,10 @@ public class Event implements Serializable{
 
     public String getCreator() { return creator; }
 
+    public void setAttendees(Attendees[] attendees) {
+        this.attendees = attendees;
+    }
+
     //Not yet implemented
 //    public void incrementClock(String userId) {
 //        vc.incrementClock(userId);

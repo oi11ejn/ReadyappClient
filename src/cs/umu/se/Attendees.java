@@ -39,4 +39,16 @@ public class Attendees implements Serializable {
     public void setReady(boolean ready) {
         this.ready = ready;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if(o instanceof Attendees) {
+            Attendees a = (Attendees) o;
+            return a.getUserId().equalsIgnoreCase(userId);
+        } else if(o instanceof String) {
+            String a = (String) o;
+            return a.equalsIgnoreCase(userId);
+        }
+        return false;
+    }
 }

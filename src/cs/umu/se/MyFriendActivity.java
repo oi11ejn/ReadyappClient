@@ -67,6 +67,16 @@ public class MyFriendActivity extends Activity {
         }
     }
 
+    public void showProfile(View view) {
+        Intent intent = new Intent(this, ProfileActivity.class);
+        startActivity(intent);
+    }
+
+    public void showEvents(View view) {
+        Intent intent = new Intent(this, HomeActivity.class);
+        startActivity(intent);
+    }
+
     public void removeFriend(View view) {
         new HttpRemoveFriendTask().execute();
     }

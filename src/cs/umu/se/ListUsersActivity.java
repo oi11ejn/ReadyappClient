@@ -17,8 +17,6 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 /**
  * Created by oi11ejn on 2015-01-02.
@@ -36,7 +34,7 @@ public class ListUsersActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.listusers);
+        setContentView(R.layout.list_users);
         getActionBar().setDisplayHomeAsUpEnabled(true);
 //        // Get the message from the intent
         Intent intent = getIntent();
@@ -51,21 +49,22 @@ public class ListUsersActivity extends Activity {
         });
         list = new ArrayList<String>();
         users = new ArrayList<User>();
-//        list.add(new User("johan123", "idag", true).toString());
-//        users.add(new User("johan123", "idag", true));
-//        list.add(new User("haldoOWNZ", "igår", false).toString());
-//        users.add(new User("haldoOWNZ", "igår", false));
-//        final StableArrayAdapter adapter = new StableArrayAdapter(this,
-//                android.R.layout.simple_list_item_1, list);
-//        String[] test = {list.get(0), list.get(1)};
-//        final MySimpleArrayAdapter adapter = new MySimpleArrayAdapter(this, list);
-//        userList.setAdapter(adapter);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         new HttpRequestTask().execute(message);
+    }
+
+    public void showProfile(View view) {
+        Intent intent = new Intent(this, ProfileActivity.class);
+        startActivity(intent);
+    }
+
+    public void showEvents(View view) {
+        Intent intent = new Intent(this, HomeActivity.class);
+        startActivity(intent);
     }
 
     protected void getUser(User user) {
@@ -125,31 +124,6 @@ public class ListUsersActivity extends Activity {
             }
             return null;
         }
-    }
-
-    private class StableArrayAdapter extends ArrayAdapter<String> {
-
-        HashMap<String, Integer> mIdMap = new HashMap<String, Integer>();
-
-        public StableArrayAdapter(Context context, int textViewResourceId,
-                                  List<String> objects) {
-            super(context, textViewResourceId, objects);
-            for (int i = 0; i < objects.size(); ++i) {
-                mIdMap.put(objects.get(i), i);
-            }
-        }
-
-        @Override
-        public long getItemId(int position) {
-            String item = getItem(position);
-            return mIdMap.get(item);
-        }
-
-        @Override
-        public boolean hasStableIds() {
-            return true;
-        }
-
     }
 
     private class MySimpleArrayAdapter extends ArrayAdapter<String> {

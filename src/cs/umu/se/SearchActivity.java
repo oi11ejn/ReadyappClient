@@ -24,6 +24,16 @@ public class SearchActivity extends Activity {
         getActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
+    public void showProfile(View view) {
+        Intent intent = new Intent(this, ProfileActivity.class);
+        startActivity(intent);
+    }
+
+    public void showEvents(View view) {
+        Intent intent = new Intent(this, HomeActivity.class);
+        startActivity(intent);
+    }
+
     public void search(View view) {
         Intent intent = new Intent(this, ListUsersActivity.class);
         EditText editText = (EditText) findViewById(R.id.searchString);

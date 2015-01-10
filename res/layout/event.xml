@@ -80,18 +80,21 @@
     <ToggleButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="New ToggleButton"
-                android:id="@+id/toggleButton"
+                android:textOff="Ready"
+                android:textOn="Ready"
+                android:onClick="sendReady"
+                android:id="@+id/ready_button"
                 android:layout_below="@+id/event_image"
                 android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"/>
+                android:layout_alignParentStart="true"
+                android:checked="false"/>
 
     <ListView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/friend_inEvent"
+            android:id="@+id/friend_in_event"
             android:layout_centerHorizontal="true"
-            android:layout_below="@+id/toggleButton"/>
+            android:layout_below="@+id/ready_button"/>
 
     <LinearLayout
             android:orientation="horizontal"
@@ -122,7 +125,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
                 android:id="@+id/profile_button"
-                android:src="@drawable/ic_action_user"
+                android:onClick="showProfile"
                 android:layout_alignTop="@+id/friend_button"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentBottom="true"

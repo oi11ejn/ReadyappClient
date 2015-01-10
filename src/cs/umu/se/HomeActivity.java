@@ -11,19 +11,11 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import de.undercouch.bson4jackson.BsonFactory;
-import org.restlet.data.Reference;
-import org.restlet.representation.InputRepresentation;
-import org.restlet.representation.Representation;
-import org.restlet.resource.ClientResource;
 import org.springframework.http.*;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,6 +27,7 @@ public class HomeActivity extends Activity {
 
     protected static String TAG = "HomeActivity";
     protected UserInfo self;
+    protected TextView self_title;
     protected ListView eventList;
     protected ArrayList<Event> events;
     static HomeActivity ha;
@@ -57,13 +50,30 @@ public class HomeActivity extends Activity {
             }
         });
         events = new ArrayList<Event>();
+        HashMap<String, String> ips = new HashMap<String, String>();
+        HashMap<String, Event> eventHashMap = new HashMap<String, Event>();
+        try {
+            InternalStorage.writeObject(getApplicationContext(), "ips", ips);
+            InternalStorage.writeObject(getApplicationContext(), "events", eventHashMap);
+        } catch (IOException e) {
+            Log.e(TAG, e.getMessage(), e);
+        }
+        self_title = (TextView) findViewById(R.id.user_name);
+        try {
+            self = (UserInfo) InternalStorage.readObject(getApplicationContext(), "self");
+            self_title.setText(self.getUserId());
+        } catch (IOException e) {
+            Log.e(TAG, e.getMessage(), e);
+        } catch (ClassNotFoundException e) {
+            Log.e(TAG, e.getMessage(), e);
+        }
+        new HttpRequestTask().execute();
         restTestServer();
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        new HttpRequestTask().execute();
         //TODO: Add current events
         //Lägger till påhittade tills vidare
         //String eventName, String location, String duration, String description, String date, String created, Attendees[] attendees, String eventImage
@@ -78,26 +88,22 @@ public class HomeActivity extends Activity {
             }
             temp[i] = member;
         }
-
+        events.clear();
         Event event1 = new Event("Beach meetup", "Bettness", "11:00-16:00", "BADA!f sf asf safd sadf safd assdf saf saf asfd asdf sad fsa", "2015-01-08", "2015-01-06", "berra", temp, "", "");
         Event event2 = new Event("Hackathon", "MA436", "06:00-24:00", "Hacka, prata och clasha", "2015-01-13", "2015-01-03", "berra",temp, "", "");
-        Event event3 = new Event("Beach meetup", "Bettness", "11:00-16:00", "BADA!", "2015-01-08", "2015-01-06","berra", temp, "", "");
-        Event event4 = new Event("Beach meetup", "Bettness", "11:00-16:00", "BADA!", "2015-01-08", "2015-01-06", "berra",temp, "", "");
-        Event event5 = new Event("Beach meetup", "Bettness", "11:00-16:00", "BADA!", "2015-01-08", "2015-01-06", "berra",temp, "", "");
-        Event event6 = new Event("Beach meetup", "Bettness", "11:00-16:00", "BADA!", "2015-01-08", "2015-01-06", "berra",temp, "", "");
-        Event event7 = new Event("Beach meetup", "Bettness", "11:00-16:00", "BADA!", "2015-01-08", "2015-01-06", "berra",temp, "", "");
-        Event event8 = new Event("Beach meetup", "Bettness", "11:00-16:00", "BADA!", "2015-01-08", "2015-01-06", "berra",temp, "", "");
-        Event event9 = new Event("Beach meetup", "Bettness", "11:00-16:00", "BADA!", "2015-01-08", "2015-01-06", "berra",temp, "", "");
         events.add(event1);
         events.add(event2);
-        events.add(event3);
-        events.add(event4);
-        events.add(event5);
-        events.add(event6);
-        events.add(event7);
-        events.add(event8);
-        events.add(event9);
-        
+        try {
+            HashMap<String, Event> eventHashMap = (HashMap<String, Event>) InternalStorage.readObject(getApplicationContext(), "events");
+            for (String key : eventHashMap.keySet()) {
+                events.add(eventHashMap.get(key));
+            }
+        } catch (IOException e) {
+         Log.e(TAG, e.getMessage(), e);
+        } catch (ClassNotFoundException e) {
+         Log.e(TAG, e.getMessage(), e);
+        }
+
         final MySimpleArrayAdapter adapter = new MySimpleArrayAdapter(this, events);
         eventList.setAdapter(adapter);
     }
@@ -118,6 +124,11 @@ public class HomeActivity extends Activity {
         }
     }
 
+    public void createEvent(View view) {
+        Intent intent = new Intent(this, CreateEventActivity.class);
+        startActivity(intent);
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu items for use in the action bar
@@ -135,12 +146,6 @@ public class HomeActivity extends Activity {
                 return true;
             case R.id.action_settings:
                 openSettings();
-                return true;
-            case R.id.action_add_friend:
-                addFriend();
-                return true;
-            case R.id.action_list_friends:
-                listFriends();
                 return true;
             case R.id.logout:
                 logout();
@@ -184,41 +189,17 @@ public class HomeActivity extends Activity {
         startActivity(intent);
     }
 
-    public void createEventActivity(View view) {
-        Intent intent = new Intent(this, CreateEventActivity.class);
-        startActivity(intent);
-    }
-
     public void showProfile(View view) {
         Intent intent = new Intent(this, ProfileActivity.class);
         startActivity(intent);
     }
 
     public void restTest(View view) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    ClientResource client = new ClientResource("http://10.0.2.2:8080/");
-                    Reference uri = new Reference("http://10.0.2.2:8080/events");
-                    Event event = new Event("Beach meetup", "Bettness", "11:00-16:00", "BADA!", "2015-01-08", "2015-01-06", "berra", null, "", "");
-//                    event.incrementClock("berra");
-                    //serialize event
-                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                    ObjectMapper mapper = new ObjectMapper(new BsonFactory());
-                    mapper.writeValue(baos, event);
-
-                    ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
-                    Representation rep = new InputRepresentation(bais, org.restlet.data.MediaType.APPLICATION_OCTET_STREAM);
-
-                    client.setReference(uri);
-                    client.post(rep);
-                    Log.i(TAG, client.getStatus().toString());
-                } catch (IOException e) {
-                    Log.e(TAG, e.getMessage(), e);
-                }
-            }
-        }).start();
+        Attendees[] attendees = new Attendees[1];
+        Attendees a = new Attendees("berra", false);
+        attendees[0] = a;
+        Event event = new Event("Beach meetup", "Bettness", "11:00-16:00", "BADA!", "2015-01-08", "2015-01-06", "berra", attendees, "", "s");
+        Sender.send(attendees, event, "post");
     }
 
 //    public void restGet(View view) {
@@ -251,6 +232,7 @@ public class HomeActivity extends Activity {
             try {
                 self = (UserInfo) InternalStorage.readObject(getApplicationContext(), "self");
                 String ip = Utils.getIPAddress(true);
+                ip = "10.0.2.2:8080";
                 Log.d(TAG, "IP address for device is: " + ip);
                 try {
                     InternalStorage.writeObject(getApplicationContext(), "ip", ip);

@@ -17,6 +17,7 @@
                    <!--android:value="@integer/google_play_services_version" />-->
         <activity
             android:name="MainActivity"
+            android:launchMode="singleTask"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -34,7 +35,7 @@
             <activity
                 android:name=".HomeActivity"
                 android:label="Events"
-                android:launchMode="singleTop"
+                android:launchMode="singleTask"
                 android:parentActivityName=".MainActivity" >
                 <meta-data
                     android:name="android.support.PARENT_ACTIVITY"
@@ -75,6 +76,7 @@
             <activity
                 android:name=".ProfileActivity"
                 android:label="@string/profile_title"
+                android:launchMode="singleTask"
                 android:parentActivityName=".HomeActivity" >
                 <meta-data
                     android:name="android.support.PARENT_ACTIVITY"
@@ -99,7 +101,7 @@
         <activity
             android:name=".SearchResultActivity"
             android:label="@string/result_title"
-            android:parentActivityName=".ListUsersActivity" >
+            android:parentActivityName=".SearchActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ListUsersActivity" />
@@ -114,7 +116,7 @@
         </activity>
         <activity
                 android:name=".AddFriendsActivity"
-                android:label="@string/friend_title"
+                android:label="@string/add_friend_title"
                 android:parentActivityName=".CreateEventActivity" >
             <meta-data
                     android:name="android.support.PARENT_ACTIVITY"

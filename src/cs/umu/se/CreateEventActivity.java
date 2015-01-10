@@ -3,20 +3,11 @@ package cs.umu.se;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
-import android.text.TextUtils;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import de.undercouch.bson4jackson.BsonFactory;
-import org.restlet.representation.InputRepresentation;
-import org.restlet.representation.Representation;
-import org.restlet.resource.ClientResource;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
 
 /**
  * Created by oi11ejn on 2015-01-05.
@@ -36,6 +27,16 @@ public class CreateEventActivity extends Activity {
         // to be able to go back
         getActionBar().setDisplayHomeAsUpEnabled(true);
         friendsToInviteIDs = new ArrayList<String>();
+    }
+
+    public void showProfile(View view) {
+        Intent intent = new Intent(this, ProfileActivity.class);
+        startActivity(intent);
+    }
+
+    public void showEvents(View view) {
+        Intent intent = new Intent(this, HomeActivity.class);
+        startActivity(intent);
     }
 
     public void addFriendsActivity(View view) {

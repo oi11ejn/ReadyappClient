@@ -75,11 +75,13 @@ public class FriendActivity extends Activity {
         @Override
         protected void onPostExecute(UserId[] response) {
             list.clear();
-            for (UserId user : response) {
-                list.add(user.toString());
+            if(response != null) {
+                for (UserId user : response) {
+                    list.add(user.toString());
+                }
+                final MySimpleArrayAdapter adapter = new MySimpleArrayAdapter(getApplication(), list);
+                friendList.setAdapter(adapter);
             }
-            final MySimpleArrayAdapter adapter = new MySimpleArrayAdapter(getApplication(), list);
-            friendList.setAdapter(adapter);
         }
 
         protected HttpHeaders createHeader() {
