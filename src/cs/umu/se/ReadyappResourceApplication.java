@@ -3,10 +3,12 @@ package cs.umu.se;
  * Created by oi11ejn on 2014-11-05.
  */
 
+import android.util.Log;
 import org.restlet.Application;
 import org.restlet.Restlet;
 import org.restlet.routing.Router;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,6 +19,11 @@ public class ReadyappResourceApplication extends Application {
 
     public ReadyappResourceApplication() {
         events = new HashMap<String, Event>();
+        try {
+            InternalStorage.writeObject(HomeActivity.ha.getApplicationContext(), "events", events);
+        } catch (IOException e) {
+            Log.e("ReadyResourceApplication", e.getMessage(), e);
+        }
     }
 
     /**

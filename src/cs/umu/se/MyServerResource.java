@@ -64,7 +64,26 @@ public class MyServerResource extends BaseResource {
 
     @Put
     public Representation put(Representation entity) throws ResourceException {
+        try {
+            // deserialize data
+            ObjectMapper mapper = new ObjectMapper(new BsonFactory());
+            Event event = mapper.readValue(entity.getStream(), Event.class);
 
+            if(event != null) {
+                VectorClock vc = event.getVc();
+                //Om event vc > ditt event vc
+//                if() {
+//
+//                }
+            }
+            return getResponseEntity();
+        } catch (JsonMappingException e) {
+            Log.e(TAG, e.getMessage(), e);
+        } catch (JsonParseException e) {
+            Log.e(TAG, e.getMessage(), e);
+        } catch (IOException e) {
+            Log.e(TAG, e.getMessage(), e);
+        }
         return getResponseEntity();
     }
 }
