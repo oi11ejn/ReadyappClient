@@ -197,7 +197,7 @@ public class HomeActivity extends Activity {
         startActivity(intent);
     }
 
-    public void createEventActivity() {
+    public void createEventActivity(View view) {
         Intent intent = new Intent(this, CreateEventActivity.class);
         startActivity(intent);
     }
