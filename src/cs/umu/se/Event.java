@@ -15,7 +15,7 @@ public class Event implements Serializable{
     private String creator;
     private Attendees[] attendees;
     private String eventImage;
-    private VectorClock vc;
+//    private VectorClock vc;
 
     public Event() {
     }
@@ -31,10 +31,11 @@ public class Event implements Serializable{
         this.creator = creator;
         this.attendees = attendees;
         this.eventImage = eventImage;
-        vc = new VectorClock(creator);
-        for(Attendees attendent : attendees) {
-            vc.addUser(attendent.getUserId());
-        }
+        //Not yet implemented
+//        vc = new VectorClock(creator);
+//        for(Attendees attendent : attendees) {
+//            vc.addUser(attendent.getUserId());
+//        }
     }
 
     public Attendees[] getAttendees() {
@@ -71,11 +72,12 @@ public class Event implements Serializable{
 
     public String getCreator() { return creator; }
 
-    public void incrementClock(String userId) {
-        vc.incrementClock(userId);
-    }
+    //Not yet implemented
+//    public void incrementClock(String userId) {
+//        vc.incrementClock(userId);
+//    }
 
-    public VectorClock getVc() {
-        return vc;
-    }
+//    public VectorClock getVc() {
+//        return vc;
+//    }
 }
