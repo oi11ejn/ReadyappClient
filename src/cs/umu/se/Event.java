@@ -15,9 +15,9 @@ public class Event implements Serializable{
     private String creator;
     private Attendees[] attendees;
     private String eventImage;
+//    private VectorClock vc;
 
     public Event() {
-
     }
 
 
@@ -31,6 +31,11 @@ public class Event implements Serializable{
         this.creator = creator;
         this.attendees = attendees;
         this.eventImage = eventImage;
+        //Not yet implemented
+//        vc = new VectorClock(creator);
+//        for(Attendees attendent : attendees) {
+//            vc.addUser(attendent.getUserId());
+//        }
     }
 
     public Attendees[] getAttendees() {
@@ -67,17 +72,12 @@ public class Event implements Serializable{
 
     public String getCreator() { return creator; }
 
-//    public JSONObject toJSON() throws JSONException {
-//        JSONObject json = new JSONObject();
-//        json.put("eventName", eventName);
-//        json.put("location", location);
-//        json.put("duration", duration);
-//        json.put("description", description);
-//        json.put("date", date);
-//        json.put("created", created);
-//        json.put("attendes", attendees);
-//        json.put("eventImage", eventImage);
-//
-//        return json;
+    //Not yet implemented
+//    public void incrementClock(String userId) {
+//        vc.incrementClock(userId);
+//    }
+
+//    public VectorClock getVc() {
+//        return vc;
 //    }
 }

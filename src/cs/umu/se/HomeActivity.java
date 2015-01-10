@@ -116,19 +116,6 @@ public class HomeActivity extends Activity {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                try {
-//                    ClientResource client = new ClientResource("http://localhost:8080/");
-//                    Reference uri = new Reference("http://localhost:8080/events/update");
-//
-//                    Representation rep = new StringRepresentation()
-//                    client.setReference(uri);
-//                    client.get();
-//                }
-//            }
-//        }).start();
     }
 
     @Override
@@ -215,6 +202,7 @@ public class HomeActivity extends Activity {
                     ClientResource client = new ClientResource("http://10.0.2.2:8080/");
                     Reference uri = new Reference("http://10.0.2.2:8080/events");
                     Event event = new Event("Beach meetup", "Bettness", "11:00-16:00", "BADA!", "2015-01-08", "2015-01-06", "berra", null, "");
+//                    event.incrementClock("berra");
                     //serialize event
                     ByteArrayOutputStream baos = new ByteArrayOutputStream();
                     ObjectMapper mapper = new ObjectMapper(new BsonFactory());
@@ -233,22 +221,22 @@ public class HomeActivity extends Activity {
         }).start();
     }
 
-    public void restGet(View view) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    ClientResource client = new ClientResource("http://10.0.2.2:8080/");
-                    Reference uri = new Reference("http://10.0.2.2:8080/events");
-
-                    client.setReference(uri);
-                    client.get();
-                } catch(Exception e) {
-                    Log.e(TAG, e.getMessage(), e);
-                }
-            }
-        }).start();
-    }
+//    public void restGet(View view) {
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                try {
+//                    ClientResource client = new ClientResource("http://10.0.2.2:8080/");
+//                    Reference uri = new Reference("http://10.0.2.2:8080/events");
+//
+//                    client.setReference(uri);
+//                    client.get();
+//                } catch(Exception e) {
+//                    Log.e(TAG, e.getMessage(), e);
+//                }
+//            }
+//        }).start();
+//    }
 
     public void restTestServer() {
         // use this to start and trigger a service
