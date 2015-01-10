@@ -11,6 +11,7 @@ public class Event implements Serializable{
     private String duration;
     private String description;
     private String date;
+    private String time;
     private String created;
     private String creator;
     private Attendees[] attendees;
@@ -21,7 +22,7 @@ public class Event implements Serializable{
     }
 
 
-    public Event(String eventName, String location, String duration, String description, String date, String created, String creator, Attendees[] attendees, String eventImage) {
+    public Event(String eventName, String location, String duration, String description, String date, String created, String creator, Attendees[] attendees, String eventImage, String time) {
         this.eventName = eventName;
         this.location = location;
         this.duration = duration;
@@ -31,6 +32,7 @@ public class Event implements Serializable{
         this.creator = creator;
         this.attendees = attendees;
         this.eventImage = eventImage;
+        this.time = time;
         //Not yet implemented
 //        vc = new VectorClock(creator);
 //        for(Attendees attendent : attendees) {

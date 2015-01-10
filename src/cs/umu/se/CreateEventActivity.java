@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.text.TextUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.undercouch.bson4jackson.BsonFactory;
 import org.restlet.representation.InputRepresentation;
@@ -37,78 +38,57 @@ public class CreateEventActivity extends Activity {
         friendsToInviteIDs = new ArrayList<String>();
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 1) {
-            if(resultCode == RESULT_OK) {
-                friendsToInviteIDs = data.getStringArrayListExtra("test");
-            }
-        }
-    }
-
     public void addFriendsActivity(View view) {
-        Intent intent = new Intent(this, AddFriendsActivity.class);
-        startActivityForResult(intent, 1);
-    }
 
-    public void createEvent(View view) {
         EditText titleView = (EditText)findViewById(R.id.title_value);
         EditText dateView = (EditText)findViewById(R.id.date_value);
         EditText durationView = (EditText)findViewById(R.id.duration_value);
         EditText locationView = (EditText)findViewById(R.id.location_value);
         EditText descriptionView = (EditText)findViewById(R.id.description_value);
+        EditText timeView = (EditText)findViewById(R.id.time_value);
 
-        String eventTitle = titleView.getText().toString();
-        String eventDate = dateView.getText().toString();
-        String eventDescription = descriptionView.getText().toString();
-        String eventDuration = durationView.getText().toString();
-        String eventLocation = locationView.getText().toString();
-
-        Log.d(TAG,"1");
-
-        Attendees[] attendees = new Attendees[friendsToInviteIDs.size() + 1];
-        for(int i = 0; i < friendsToInviteIDs.size(); i++) {
-            attendees[i] = new Attendees(friendsToInviteIDs.get(i), false);
+        boolean allSet = true;
+        if(TextUtils.isEmpty(titleView.getText().toString().trim())) {
+            titleView.setError("must be set");
+            allSet = false;
         }
-        UserInfo self = new UserInfo();
-        try {
-            self  = (UserInfo) InternalStorage.readObject(getApplicationContext(), "self");
-            attendees[friendsToInviteIDs.size()] = new Attendees(self.getUserId(), true);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+        if(TextUtils.isEmpty(dateView.getText().toString().trim())) {
+            dateView.setError("must be set");
+            allSet = false;
         }
-        Calendar date1 = Calendar.getInstance(TimeZone.getDefault());
-        Date date2 = date1.getTime();
-        Event event = new Event(eventTitle, eventLocation, eventDuration, eventDescription, eventDate, date2.toString(), self.getUserId() ,attendees, "IMAGE");
-
-        HashMap<String, String> friendsToInviteIPs = new HashMap<String, String>();
-        try {
-            friendsToInviteIPs = (HashMap<String, String>) InternalStorage.readObject(getApplicationContext(), "friendsIPs");
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+        if(TextUtils.isEmpty(durationView.getText().toString().trim())) {
+            durationView.setError("must be set");
+            allSet = false;
         }
-        for(int i = 0; i < friendsToInviteIDs.size(); i++) {
-            String friendToAddIP = friendsToInviteIPs.get(friendsToInviteIDs.get(i));
+        if(TextUtils.isEmpty(locationView.getText().toString().trim())) {
+            locationView.setError("must be set");
+            allSet = false;
+        }
+        if(TextUtils.isEmpty(descriptionView.getText().toString().trim())) {
+            descriptionView.setError("must be set");
+            allSet = false;
+        }
+        if(TextUtils.isEmpty(timeView.getText().toString().trim())) {
+            timeView.setError("must be set");
+            allSet = false;
+        }
+        if(allSet) {
+            String eventTitle = titleView.getText().toString();
+            String eventDate = dateView.getText().toString();
+            String eventDescription = descriptionView.getText().toString();
+            String eventDuration = durationView.getText().toString();
+            String eventLocation = locationView.getText().toString();
+            String eventTime = timeView.getText().toString();
 
-            ClientResource client = new ClientResource("http://" + friendToAddIP + ":8080/events/");
+            Intent intent = new Intent(this, AddFriendsActivity.class);
+            intent.putExtra("title", eventTitle); //title
+            intent.putExtra("date", eventDate); //date
+            intent.putExtra("description", eventDescription); //description
+            intent.putExtra("duration", eventDuration); //duration
+            intent.putExtra("location", eventLocation); //location
+            intent.putExtra("time", eventTime); //time
 
-            try {
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                ObjectMapper mapper = new ObjectMapper(new BsonFactory());
-
-                mapper.writeValue(baos, event);
-
-                ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
-                Representation rep = new InputRepresentation(bais, org.restlet.data.MediaType.APPLICATION_OCTET_STREAM);
-                client.post(rep);
-                Log.i(TAG, client.getStatus().toString());
-            } catch (IOException e) {
-                Log.e(TAG, e.getMessage(), e);
-            }
+            startActivity(intent);
         }
     }
 }

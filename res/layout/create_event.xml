@@ -1,100 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:weightSum="1">
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="41dp"
-        android:layout_weight="0.05">
-
-        <EditText
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/contact_value"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="15dp"/>
-
-        <Button
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/contact_button"
-            android:background="@drawable/ic_action_add_person"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:onClick="addFriendsActivity"
-            android:layout_marginRight="10dp"
-            android:layout_alignParentBottom="true"
-            android:layout_toRightOf="@+id/contact_value"
-            android:layout_toEndOf="@+id/contact_value"/>
-    </RelativeLayout>
 
     <EditText
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:id="@+id/title_value"
         android:layout_weight="0.05"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="25dp"
-        android:layout_marginRight="270dp"
-        android:layout_marginBottom="10dp"
-        android:hint="Title"/>
+        android:hint="Title"
+        android:layout_marginTop="15dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"/>
 
     <EditText
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:inputType="time"
         android:ems="10"
         android:id="@+id/date_value"
         android:hint="Date"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="270dp"/>
+        android:layout_marginTop="15dp"
+        android:layout_below="@+id/title_value"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"/>
+
+    <EditText
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:id="@+id/time_value"
+            android:hint="Time"
+            android:layout_marginTop="15dp"
+            android:layout_below="@+id/date_value"
+            android:layout_alignLeft="@+id/date_value"
+            android:layout_alignStart="@+id/date_value"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"/>
 
     <EditText
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:id="@+id/duration_value"
             android:hint="Duration"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="270dp"/>
+            android:layout_marginTop="15dp"
+            android:layout_below="@+id/time_value"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"/>
     <EditText
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:id="@+id/location_value"
         android:hint="Location"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="270dp"/>
+        android:layout_marginTop="15dp"
+        android:layout_below="@+id/duration_value"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"/>
 
     <EditText
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:id="@+id/description_value"
         android:hint="Description"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="270dp"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="10dp"/>
+        android:layout_marginTop="15dp"
+        android:layout_below="@+id/location_value"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"/>
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/send_button"
+        android:text="Add friends"
+        android:id="@+id/contact_button"
         android:layout_gravity="right"
-        android:onClick="createEvent"
-        android:layout_marginTop="125dp"
-        android:background="@drawable/ic_action_send_now"/>
+        android:onClick="addFriendsActivity"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:background="#193441"
+        android:textColor="#FFFFFF"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"/>
 
-</LinearLayout>
+</RelativeLayout>

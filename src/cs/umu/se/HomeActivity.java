@@ -79,15 +79,15 @@ public class HomeActivity extends Activity {
             temp[i] = member;
         }
 
-        Event event1 = new Event("Beach meetup", "Bettness", "11:00-16:00", "BADA!f sf asf safd sadf safd assdf saf saf asfd asdf sad fsa", "2015-01-08", "2015-01-06", "berra", temp, "");
-        Event event2 = new Event("Hackathon", "MA436", "06:00-24:00", "Hacka, prata och clasha", "2015-01-13", "2015-01-03", "berra",temp, "");
-        Event event3 = new Event("Beach meetup", "Bettness", "11:00-16:00", "BADA!", "2015-01-08", "2015-01-06","berra", temp, "");
-        Event event4 = new Event("Beach meetup", "Bettness", "11:00-16:00", "BADA!", "2015-01-08", "2015-01-06", "berra",temp, "");
-        Event event5 = new Event("Beach meetup", "Bettness", "11:00-16:00", "BADA!", "2015-01-08", "2015-01-06", "berra",temp, "");
-        Event event6 = new Event("Beach meetup", "Bettness", "11:00-16:00", "BADA!", "2015-01-08", "2015-01-06", "berra",temp, "");
-        Event event7 = new Event("Beach meetup", "Bettness", "11:00-16:00", "BADA!", "2015-01-08", "2015-01-06", "berra",temp, "");
-        Event event8 = new Event("Beach meetup", "Bettness", "11:00-16:00", "BADA!", "2015-01-08", "2015-01-06", "berra",temp, "");
-        Event event9 = new Event("Beach meetup", "Bettness", "11:00-16:00", "BADA!", "2015-01-08", "2015-01-06", "berra",temp, "");
+        Event event1 = new Event("Beach meetup", "Bettness", "11:00-16:00", "BADA!f sf asf safd sadf safd assdf saf saf asfd asdf sad fsa", "2015-01-08", "2015-01-06", "berra", temp, "", "");
+        Event event2 = new Event("Hackathon", "MA436", "06:00-24:00", "Hacka, prata och clasha", "2015-01-13", "2015-01-03", "berra",temp, "", "");
+        Event event3 = new Event("Beach meetup", "Bettness", "11:00-16:00", "BADA!", "2015-01-08", "2015-01-06","berra", temp, "", "");
+        Event event4 = new Event("Beach meetup", "Bettness", "11:00-16:00", "BADA!", "2015-01-08", "2015-01-06", "berra",temp, "", "");
+        Event event5 = new Event("Beach meetup", "Bettness", "11:00-16:00", "BADA!", "2015-01-08", "2015-01-06", "berra",temp, "", "");
+        Event event6 = new Event("Beach meetup", "Bettness", "11:00-16:00", "BADA!", "2015-01-08", "2015-01-06", "berra",temp, "", "");
+        Event event7 = new Event("Beach meetup", "Bettness", "11:00-16:00", "BADA!", "2015-01-08", "2015-01-06", "berra",temp, "", "");
+        Event event8 = new Event("Beach meetup", "Bettness", "11:00-16:00", "BADA!", "2015-01-08", "2015-01-06", "berra",temp, "", "");
+        Event event9 = new Event("Beach meetup", "Bettness", "11:00-16:00", "BADA!", "2015-01-08", "2015-01-06", "berra",temp, "", "");
         events.add(event1);
         events.add(event2);
         events.add(event3);
@@ -201,7 +201,7 @@ public class HomeActivity extends Activity {
                 try {
                     ClientResource client = new ClientResource("http://10.0.2.2:8080/");
                     Reference uri = new Reference("http://10.0.2.2:8080/events");
-                    Event event = new Event("Beach meetup", "Bettness", "11:00-16:00", "BADA!", "2015-01-08", "2015-01-06", "berra", null, "");
+                    Event event = new Event("Beach meetup", "Bettness", "11:00-16:00", "BADA!", "2015-01-08", "2015-01-06", "berra", null, "", "");
 //                    event.incrementClock("berra");
                     //serialize event
                     ByteArrayOutputStream baos = new ByteArrayOutputStream();

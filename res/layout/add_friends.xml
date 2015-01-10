@@ -6,19 +6,18 @@
     <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/add_friends_button"
-            android:text="Add friends"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:onClick="finnish"
+            android:id="@+id/create_event_button"
+            android:text="Create event"
+            android:onClick="createEvent"
             android:background="#193441"
-            android:layout_marginRight="20dp"
             android:textColor="#FFFFFF"
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginBottom="10dp"
             android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"/>
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"/>
 
     <ListView
             android:layout_width="wrap_content"
@@ -26,13 +25,15 @@
             android:id="@+id/friend_list"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/add_friends_button"/>
+            android:layout_below="@+id/create_event_button"
+            android:layout_above="@+id/linearLayout"/>
 
     <LinearLayout
             android:orientation="horizontal"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:weightSum="1"
+            android:layout_above="@id/create_event_button"
             android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
@@ -66,6 +67,17 @@
                 android:textColor="#FFFFFF"
                 android:background="#193441"/>
     </LinearLayout>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Select friends and create event"
+                android:textSize="15dp"
+                android:id="@+id/textView"
+                android:layout_alignTop="@+id/add_friends_button"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"/>
 
 
 </RelativeLayout>

@@ -4,19 +4,27 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import de.undercouch.bson4jackson.BsonFactory;
+import org.restlet.representation.InputRepresentation;
+import org.restlet.representation.Representation;
+import org.restlet.resource.ClientResource;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.*;
 
 /**
  * Created by oi11msd on 2015-01-08.
  */
 public class AddFriendsActivity extends Activity{
-
+    protected static String TAG = "addFriendsActivity";
     protected ListView friends;
     protected ArrayList<String> list;
     /**
@@ -58,18 +66,66 @@ public class AddFriendsActivity extends Activity{
 //        }).start();
     }
 
-    public void finnish(View view) {
-        Intent resultIntent = new Intent();
+    public void createEvent(View view) {
+        String eventTitle = getIntent().getStringExtra("title");
+        String eventDate = getIntent().getStringExtra("date");
+        String eventDescription = getIntent().getStringExtra("description");
+        String eventDuration = getIntent().getStringExtra("duration");
+        String eventLocation = getIntent().getStringExtra("location");
+        String eventTime = getIntent().getStringExtra("time");
+
         final MySimpleArrayAdapter adapter = (MySimpleArrayAdapter) friends.getAdapter();
-        ArrayList<String> friendsToAdd = new ArrayList<String>();
+        ArrayList<String> friendsToInviteIDs = new ArrayList<String>();
         for(int i = 0; i < adapter.getCount(); i++) {
             if(adapter.isChecked(i)) {
-                friendsToAdd.add(i, adapter.getFriendID(i));
+                friendsToInviteIDs.add(i, adapter.getFriendID(i));
             }
         }
-        resultIntent.putStringArrayListExtra("test", friendsToAdd);
-        setResult(RESULT_OK, resultIntent);
-        finish();
+
+        Attendees[] attendees = new Attendees[friendsToInviteIDs.size() + 1];
+        for(int i = 0; i < friendsToInviteIDs.size(); i++) {
+            attendees[i] = new Attendees(friendsToInviteIDs.get(i), false);
+        }
+        UserInfo self = new UserInfo();
+        try {
+            self  = (UserInfo) InternalStorage.readObject(getApplicationContext(), "self");
+            attendees[friendsToInviteIDs.size()] = new Attendees(self.getUserId(), true);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        Calendar date1 = Calendar.getInstance(TimeZone.getDefault());
+        Date date2 = date1.getTime();
+        Event event = new Event(eventTitle, eventLocation, eventDuration, eventDescription, eventDate, date2.toString(), self.getUserId() ,attendees, "IMAGE", eventTime);
+
+        HashMap<String, String> friendsToInviteIPs = new HashMap<String, String>();
+        try {
+            friendsToInviteIPs = (HashMap<String, String>) InternalStorage.readObject(getApplicationContext(), "friendsIPs");
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        for(int i = 0; i < friendsToInviteIDs.size(); i++) {
+            String friendToAddIP = friendsToInviteIPs.get(friendsToInviteIDs.get(i));
+
+            ClientResource client = new ClientResource("http://" + friendToAddIP + ":8080/events/");
+
+            try {
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                ObjectMapper mapper = new ObjectMapper(new BsonFactory());
+
+                mapper.writeValue(baos, event);
+
+                ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+                Representation rep = new InputRepresentation(bais, org.restlet.data.MediaType.APPLICATION_OCTET_STREAM);
+                client.post(rep);
+                Log.i(TAG, client.getStatus().toString());
+            } catch (IOException e) {
+                Log.e(TAG, e.getMessage(), e);
+            }
+        }
     }
 
     private class MySimpleArrayAdapter extends ArrayAdapter<String> {
