@@ -1,6 +1,7 @@
 package cs.umu.se;
 
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -27,6 +28,7 @@ public class AddFriendsActivity extends Activity{
     protected static String TAG = "addFriendsActivity";
     protected ListView friends;
     protected ArrayList<String> list;
+    protected ArrayList<Boolean> test = new ArrayList<Boolean>();
     /**
      * Called when the activity is first created.
      */
@@ -39,6 +41,7 @@ public class AddFriendsActivity extends Activity{
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
         friends = (ListView) findViewById(R.id.friend_list);
+
         list = new ArrayList<String>();
     }
 
@@ -62,6 +65,18 @@ public class AddFriendsActivity extends Activity{
         }
         final MySimpleArrayAdapter adapter = new MySimpleArrayAdapter(getApplication(), list);
         friends.setAdapter(adapter);
+
+//        friends.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view,
+//                                    final int position, long id) {
+//                //TODO: GOTO -> EVENT
+//                CheckBox cBox = (CheckBox)view;
+//                cBox.setChecked();
+//
+//                adapter.getView(position, parent, parent);
+//            }
+//        });
 //            }
 //        }).start();
     }
@@ -77,8 +92,15 @@ public class AddFriendsActivity extends Activity{
         final MySimpleArrayAdapter adapter = (MySimpleArrayAdapter) friends.getAdapter();
         ArrayList<String> friendsToInviteIDs = new ArrayList<String>();
         for(int i = 0; i < adapter.getCount(); i++) {
-            if(adapter.isChecked(i)) {
-                friendsToInviteIDs.add(i, adapter.getFriendID(i));
+            View theRow = adapter.getView(i, null, (ViewGroup)view.getParent());
+            CheckBox test = (CheckBox)theRow.findViewById(R.id.add_friend_checkbox);
+            TextView test2 = (TextView)theRow.findViewById(R.id.add_friend_id);
+            String name = (String)test2.getText();
+            if(test.isChecked()) {
+                Log.d(TAG, "Lägger till: " + name);
+                friendsToInviteIDs.add(name);
+            } else {
+                Log.d(TAG, "Lägger ej till: " + name);
             }
         }
 
@@ -131,40 +153,62 @@ public class AddFriendsActivity extends Activity{
     private class MySimpleArrayAdapter extends ArrayAdapter<String> {
         private final Context context;
         private final ArrayList<String> values;
-        private ArrayList<View> rowViews;
+        private HashMap<Integer, Boolean> itemChecked;
 
         public MySimpleArrayAdapter(Context context, ArrayList<String> values) {
             super(context, R.layout.add_friends_row, values);
             this.context = context;
             this.values = values;
-            rowViews = new ArrayList<View>();
+            itemChecked = new HashMap<Integer, Boolean>();
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            LayoutInflater inflater = (LayoutInflater) context
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View rowView = inflater.inflate(R.layout.add_friends_row, parent, false);
-            TextView textView = (TextView) rowView.findViewById(R.id.add_friend_id);
-            textView.setText(values.get(position));
-            rowViews.add(position, rowView);
+        public View getView(final int position, View convertView, ViewGroup parent) {
+            final ViewHolder holder;
 
-            return rowView;
-        }
+            if(convertView == null) {
+                LayoutInflater inflater = (LayoutInflater) context
+                        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                convertView = inflater.inflate(R.layout.add_friends_row, parent, false);
+                holder = new ViewHolder();
 
-        public boolean isChecked(int position) {
-            CheckBox box = (CheckBox) rowViews.get(position).findViewById(R.id.add_friend_checkbox);
-            if(box.isChecked()) {
-                return true;
+                holder.textView = (TextView) convertView.findViewById(R.id.add_friend_id);
+                holder.cBox = (CheckBox) convertView.findViewById(R.id.add_friend_checkbox);
+                convertView.setTag(holder);
             } else {
-                return false;
+                holder=(ViewHolder)convertView.getTag();
             }
+            holder.textView.setText(values.get(position));
+
+            holder.cBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+               @Override
+               public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                   // TODO Auto-generated method stub
+                   Log.d(TAG, "tjaba" + values.get(position));
+                   itemChecked.put(position, isChecked);
+                   if (itemChecked.get(position)) {
+                       holder.cBox.setChecked(true);
+                       Log.d(TAG, "sant");
+                   } else {
+                       holder.cBox.setChecked(false);
+                       Log.d(TAG, "falskt");
+                   }
+               }
+            });
+
+            if(itemChecked.containsKey(position)) {
+                holder.cBox.setChecked(itemChecked.get(position));
+            }else {
+                itemChecked.put(position, false);
+                holder.cBox.setChecked(false);
+            }
+
+            return convertView;
         }
 
-        public String getFriendID(int position) {
-            TextView friendID = (TextView) rowViews.get(position).findViewById(R.id.add_friend_id);
-            return friendID.getText().toString();
-        }
     }
-
+    static class ViewHolder {
+        TextView textView;
+        CheckBox cBox;
+    }
 }
