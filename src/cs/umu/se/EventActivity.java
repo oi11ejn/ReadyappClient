@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -14,16 +16,21 @@ import android.widget.ToggleButton;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by oi11msd on 2015-01-07.
  */
 public class EventActivity extends Activity {
 
+    private final static String TAG = "EventActivity";
+
     protected ListView friendsInEventList;
     protected ArrayList<Attendees> list;
     protected Event event;
     protected UserInfo self;
+    protected MySimpleArrayAdapter adapter;
+    protected Thread run;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -38,8 +45,6 @@ public class EventActivity extends Activity {
     @Override
     public void onStart() {
         super.onStart();
-//        new Thread(new Runnable() {
-//            public void run() {
         try {
             event  = (Event) InternalStorage.readObject(getApplicationContext(), "event");
             self = (UserInfo) InternalStorage.readObject(getApplicationContext(), "self");
@@ -64,10 +69,92 @@ public class EventActivity extends Activity {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-        final MySimpleArrayAdapter adapter = new MySimpleArrayAdapter(getApplication(), list);
+        adapter = new MySimpleArrayAdapter(getApplication(), list);
         friendsInEventList.setAdapter(adapter);
-//            }
-//        }).start();
+        run = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    HashMap<String, Event> eventHashMap = (HashMap<String, Event>) InternalStorage.readObject(getApplicationContext(), "events");
+                    Attendees[] attendees1 = event.getAttendees();
+                    Attendees[] attendees2 = eventHashMap.get(event.getEventName()+event.getCreator()).getAttendees();
+                    boolean changed = false;
+                    for(Attendees a1 : attendees1) {
+                        for(Attendees a2 : attendees2) {
+                            if(a1.getUserId().equalsIgnoreCase(a2.getUserId())) {
+                                if(a1.isReady() != a2.isReady()) {
+                                    changed = true;
+                                }
+                            }
+                        }
+                    }
+                    if(changed) {
+                        list.clear();
+                        event = eventHashMap.get(event.getEventName()+event.getCreator());
+                        for(Attendees attendee : attendees2) {
+                            list.add(attendee);
+                        }
+                        adapter.notifyDataSetChanged();
+                    }
+                } catch (IOException e) {
+                    Log.e(TAG, e.getMessage(), e);
+                } catch (ClassNotFoundException e) {
+                    Log.e(TAG, e.getMessage(), e);
+                }
+            }
+        });
+        runOnUiThread(run);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle presses on the action bar items
+        switch (item.getItemId()) {
+            case R.id.action_search:
+                openSearch();
+                return true;
+            case R.id.action_settings:
+                openSettings();
+                return true;
+            case R.id.refresh:
+                refresh();
+                return true;
+            case R.id.logout:
+                logout();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    public void openEvent(Event event) {
+        try {
+            InternalStorage.writeObject(getApplicationContext(), "event", event);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Intent intent = new Intent(this, EventActivity.class);
+        startActivity(intent);
+    }
+
+    public void openSearch() {
+        Intent intent = new Intent(this, SearchActivity.class);
+        startActivity(intent);
+    }
+
+    public void openSettings() {
+        Intent intent = new Intent(this, SettingsActivity.class);
+        startActivity(intent);
+    }
+
+    public void refresh() {
+        runOnUiThread(run);
+    }
+
+    private void logout() {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 
     public void sendReady(View view) {
