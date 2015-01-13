@@ -82,6 +82,9 @@ public class EventActivity extends Activity {
         }
     }
 
+    public void readyCheck(View view) {
+        Sender.sendReadyCheck(event);
+    }
 
     public void showEvents(View view) {
         Intent intent = new Intent(this, HomeActivity.class);

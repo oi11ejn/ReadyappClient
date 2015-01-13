@@ -130,5 +130,59 @@ public class Sender {
         }).start();
     }
 
+    public static void sendReadyCheck(final Event event) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    HashMap<String, String> ips = (HashMap<String, String>) InternalStorage.readObject(HomeActivity.ha.getApplicationContext(), "ips");
+                    Boolean send;
+                    Attendees[] attendees = event.getAttendees();
+                    for (Attendees attendee : attendees)
+                        Log.d(TAG, "RECIPIENT " + attendee.getUserId());
+
+                    for (Attendees attendee : attendees) {
+                        send = false;
+                        if (!ips.containsKey(attendee.getUserId())) {
+                            final String url = "https://readyappserver.herokuapp.com/ip/" + attendee.getUserId();
+                            RestTemplate restTemplate = new RestTemplate();
+                            restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
+                            restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+                            Authentication auth = (Authentication) InternalStorage.readObject(HomeActivity.ha.getApplicationContext(), "auth");
+                            HttpHeaders requestHeader = new HttpHeaders();
+                            requestHeader.set("Authorization", auth.getAuth());
+                            requestHeader.setContentType(org.springframework.http.MediaType.APPLICATION_JSON);
+                            HttpEntity entity = new HttpEntity(requestHeader);
+                            Log.d(TAG, "Trying to get: " + attendee.getUserId());
+                            ResponseEntity<IP> response = restTemplate.exchange(url, HttpMethod.GET, entity, IP.class);
+                            if (response.getStatusCode().equals(HttpStatus.OK)) {
+                                ips.put(attendee.getUserId(), response.getBody().getIp());
+                                send = true;
+                            }
+                        } else {
+                            send = true;
+                        }
+                        if(send) {
+                            ClientResource client = new ClientResource("http://" + ips.get(attendee.getUserId()) + "/ready/" + event.getEventName());
+                            Log.d(TAG, "CLIENT: " + ips.get(attendee.getUserId()));
+                            //serialize event
+                            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                            ObjectMapper mapper = new ObjectMapper(new BsonFactory());
+                            mapper.writeValue(baos, new ReadyCheck(120));
+
+                            ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+                            Representation rep = new InputRepresentation(bais, MediaType.APPLICATION_OCTET_STREAM);
+
+                            client.post(rep);
+                        }
+                    }
+                } catch (ClassNotFoundException e) {
+                    Log.e(TAG, e.getMessage(), e);
+                } catch (IOException e) {
+                    Log.e(TAG, e.getMessage(), e);
+                }
+            }
+        }).start();
+    }
 
 }

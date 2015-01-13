@@ -122,6 +122,15 @@
                     android:name="android.support.PARENT_ACTIVITY"
                     android:value=".CreateEventActivity" />
         </activity>
+        <activity
+                android:name=".MyFriendsActivity"
+                android:label="@string/your_friend_title"
+                android:launchMode="singleTask"
+                android:parentActivityName=".HomeActivity" >
+            <meta-data
+                    android:name="android.support.PARENT_ACTIVITY"
+                    android:value=".HomeActivity" />
+        </activity>
         <service
             android:name=".RestService"
             android:exported="false"/>

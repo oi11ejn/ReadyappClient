@@ -127,6 +127,11 @@ public class ProfileActivity extends Activity {
         startActivity(intent);
     }
 
+    public void showContacts(View view) {
+        Intent intent = new Intent(this, MyFriendsActivity.class);
+        startActivity(intent);
+    }
+
     private class MySimpleArrayAdapter extends ArrayAdapter<String> {
         private final Context context;
         private final ArrayList<String> values;
