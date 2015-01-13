@@ -187,5 +187,54 @@ public class Sender {
             }
         }).start();
     }
+    public static void sendFriendRequest(final String friendId, final String userId) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    HashMap<String, String> ips = (HashMap<String, String>) InternalStorage.readObject(HomeActivity.ha.getApplicationContext(), "ips");
+                    Boolean send = false;
+                    if (!ips.containsKey(friendId)) {
+                        final String url = "https://readyappserver.herokuapp.com/ip/" + friendId;
+                        RestTemplate restTemplate = new RestTemplate();
+                        restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
+                        restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+                        Authentication auth = (Authentication) InternalStorage.readObject(HomeActivity.ha.getApplicationContext(), "auth");
+                        HttpHeaders requestHeader = new HttpHeaders();
+                        requestHeader.set("Authorization", auth.getAuth());
+                        requestHeader.setContentType(org.springframework.http.MediaType.APPLICATION_JSON);
+                        HttpEntity entity = new HttpEntity(requestHeader);
+                        ResponseEntity<IP> response = restTemplate.exchange(url, HttpMethod.GET, entity, IP.class);
+                        if (response.getStatusCode().equals(HttpStatus.OK)) {
+                            ips.put(friendId, response.getBody().getIp());
+                            send = true;
+                        }
+                    } else {
+                        send = true;
+                    }
+                    if (send) {
+                        ClientResource client = new ClientResource("http://" + ips.get(friendId) + "/friends/" + userId);
+                        UserId self = new UserId();
+                        self.setUserId(userId);
+
+                        //serialize event
+                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                        ObjectMapper mapper = new ObjectMapper(new BsonFactory());
+                        mapper.writeValue(baos, self);
+
+                        ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+                        Representation rep = new InputRepresentation(bais, MediaType.APPLICATION_OCTET_STREAM);
+
+                        client.post(rep);
+                    }
+                } catch (ClassNotFoundException e) {
+                    Log.e(TAG, e.getMessage(), e);
+                } catch (IOException e) {
+                    Log.e(TAG, e.getMessage(), e);
+                }
+            }
+        }).start();
+    }
+
 
 }

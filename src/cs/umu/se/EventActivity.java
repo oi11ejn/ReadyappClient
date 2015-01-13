@@ -5,10 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -107,6 +104,14 @@ public class EventActivity extends Activity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu items for use in the action bar
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_actions, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle presses on the action bar items
         switch (item.getItemId()) {
@@ -125,17 +130,6 @@ public class EventActivity extends Activity {
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    public void openEvent(Event event) {
-        try {
-            InternalStorage.writeObject(getApplicationContext(), "event", event);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        Intent intent = new Intent(this, EventActivity.class);
-        startActivity(intent);
     }
 
     public void openSearch() {

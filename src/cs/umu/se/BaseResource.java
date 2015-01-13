@@ -2,6 +2,7 @@ package cs.umu.se;
 
 import org.restlet.resource.ServerResource;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -14,5 +15,9 @@ public abstract class BaseResource extends ServerResource {
 
         protected Map<String, Event> getEvents() {
             return ((ReadyappResourceApplication) getApplication()).getEvents();
+        }
+
+        protected List<String> getFriendRequests() {
+            return ((ReadyappResourceApplication) getApplication()).getFriendRequests();
         }
 }

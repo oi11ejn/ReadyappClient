@@ -25,11 +25,13 @@ public class MyServerResource extends BaseResource {
     private String createdEvent;
     private String ready;
     private String readyCheck;
+    private String friendRequest;
 
     public void doInit() {
         this.createdEvent = (String) getRequest().getAttributes().get("eventId");
         this.ready = (String) getRequest().getAttributes().get("status");
         this.readyCheck = (String) getRequest().getAttributes().get("eventId1");
+        this.friendRequest = (String) getRequest().getAttributes().get("userId");
 //        getVariants().add(new Variant(MediaType.APPLICATION_OCTET_STREAM));
     }
 
@@ -99,8 +101,17 @@ public class MyServerResource extends BaseResource {
                     args.putString("ready_check_event_creator", getEvents().get(readyCheck).getCreator());
                     fragment.setArguments(args);
                     fragment.show(HomeActivity.ha.getFragmentManager(), "ready_check");
+                    getResponse().setStatus(Status.SUCCESS_OK);
                 } else
                     getResponse().setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+            } else if(friendRequest != null) {
+                ObjectMapper mapper = new ObjectMapper(new BsonFactory());
+                UserId userId = mapper.readValue(entity.getStream(), UserId.class);
+
+                if(!getFriendRequests().contains(userId)) {
+                    getFriendRequests().add(userId.getUserId());
+                    InternalStorage.writeObject(HomeActivity.ha.getApplicationContext(), "friendRequests", getFriendRequests());
+                }
             }
         } catch (JsonMappingException e) {
             Log.e(TAG, e.getMessage(), e);

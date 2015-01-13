@@ -54,9 +54,11 @@ public class HomeActivity extends Activity {
         events = new ArrayList<Event>();
         HashMap<String, String> ips = new HashMap<String, String>();
         HashMap<String, Event> eventHashMap = new HashMap<String, Event>();
+        ArrayList<String> friendRequest = new ArrayList<String>();
         try {
             InternalStorage.writeObject(getApplicationContext(), "ips", ips);
             InternalStorage.writeObject(getApplicationContext(), "events", eventHashMap);
+            InternalStorage.writeObject(getApplicationContext(), "friendRequest", friendRequest);
         } catch (IOException e) {
             Log.e(TAG, e.getMessage(), e);
         }
@@ -158,6 +160,9 @@ public class HomeActivity extends Activity {
             case R.id.action_settings:
                 openSettings();
                 return true;
+            case R.id.pending:
+                openPendingRequests();
+                return true;
             case R.id.refresh:
                 refresh();
                 return true;
@@ -190,20 +195,23 @@ public class HomeActivity extends Activity {
         startActivity(intent);
     }
 
+    private void openPendingRequests() {
+        Intent intent = new Intent(this, PendingRequestsActivity.class);
+        startActivity(intent);
+    }
+
     public void refresh() {
         runOnUiThread(run);
     }
 
-    private void addFriend() {
+
+    private void logout() {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 
     private void listFriends() {
         Intent intent = new Intent(this, FriendActivity.class);
-        startActivity(intent);
-    }
-
-    private void logout() {
-        Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
 
