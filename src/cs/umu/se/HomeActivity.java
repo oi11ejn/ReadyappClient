@@ -30,7 +30,9 @@ public class HomeActivity extends Activity {
     protected TextView self_title;
     protected ListView eventList;
     protected ArrayList<Event> events;
-    static HomeActivity ha;
+    protected MySimpleArrayAdapter adapter;
+    protected Thread run;
+    public static HomeActivity ha;
     /**
      * Called when the activity is first created.
      */
@@ -68,7 +70,7 @@ public class HomeActivity extends Activity {
             Log.e(TAG, e.getMessage(), e);
         }
         new HttpRequestTask().execute();
-        restTestServer();
+        restServer();
     }
 
     @Override
@@ -78,10 +80,10 @@ public class HomeActivity extends Activity {
         //Lägger till påhittade tills vidare
         //String eventName, String location, String duration, String description, String date, String created, Attendees[] attendees, String eventImage
         Attendees[] temp = new Attendees[9];
-        for(int i = 0; i < 9; i++) {
+        for (int i = 0; i < 9; i++) {
             Attendees member = new Attendees();
             member.setUserId("stefan" + i);
-            if((i % 2) == 0) {
+            if ((i % 2) == 0) {
                 member.setReady(true);
             } else {
                 member.setReady(false);
@@ -90,38 +92,47 @@ public class HomeActivity extends Activity {
         }
         events.clear();
         Event event1 = new Event("Beach meetup", "Bettness", "11:00-16:00", "BADA!f sf asf safd sadf safd assdf saf saf asfd asdf sad fsa", "2015-01-08", "2015-01-06", "berra", temp, "", "");
-        Event event2 = new Event("Hackathon", "MA436", "06:00-24:00", "Hacka, prata och clasha", "2015-01-13", "2015-01-03", "berra",temp, "", "");
+        Event event2 = new Event("Hackathon", "MA436", "06:00-24:00", "Hacka, prata och clasha", "2015-01-13", "2015-01-03", "berra", temp, "", "");
         events.add(event1);
         events.add(event2);
-        try {
-            HashMap<String, Event> eventHashMap = (HashMap<String, Event>) InternalStorage.readObject(getApplicationContext(), "events");
-            for (String key : eventHashMap.keySet()) {
-                events.add(eventHashMap.get(key));
-            }
-        } catch (IOException e) {
-         Log.e(TAG, e.getMessage(), e);
-        } catch (ClassNotFoundException e) {
-         Log.e(TAG, e.getMessage(), e);
-        }
+//        try {
+//            HashMap<String, Event> eventHashMap = (HashMap<String, Event>) InternalStorage.readObject(getApplicationContext(), "events");
+//            for (String key : eventHashMap.keySet()) {
+//                events.add(eventHashMap.get(key));
+//            }
+//        } catch (IOException e) {
+//         Log.e(TAG, e.getMessage(), e);
+//        } catch (ClassNotFoundException e) {
+//         Log.e(TAG, e.getMessage(), e);
+//        }
 
-        final MySimpleArrayAdapter adapter = new MySimpleArrayAdapter(this, events);
+        adapter = new MySimpleArrayAdapter(this, events);
         eventList.setAdapter(adapter);
-    }
-
-    public void updateEvents(View view) {
-        try {
-            HashMap<String, Event> eventHashMap = (HashMap<String, Event>) InternalStorage.readObject(getApplicationContext(), "events");
-            int i = 0;
-            for(String key : eventHashMap.keySet()) {
-                Log.d(TAG, "EVENT" + i + ": " + key);
-                i++;
+        run = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    HashMap<String, Event> eventHashMap = (HashMap<String, Event>) InternalStorage.readObject(getApplicationContext(), "events");
+                    boolean changed = false;
+                    if (!eventHashMap.isEmpty()) {
+                        for (String key : eventHashMap.keySet()) {
+                            if (!events.contains(eventHashMap.get(key))) {
+                                events.add(eventHashMap.get(key));
+                                changed = true;
+                            }
+                        }
+                        if (changed) {
+                            adapter.notifyDataSetChanged();
+                        }
+                    }
+                } catch (IOException e) {
+                    Log.e(TAG, e.getMessage(), e);
+                } catch (ClassNotFoundException e) {
+                    Log.e(TAG, e.getMessage(), e);
+                }
             }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+        });
+        runOnUiThread(run);
     }
 
     public void createEvent(View view) {
@@ -146,6 +157,9 @@ public class HomeActivity extends Activity {
                 return true;
             case R.id.action_settings:
                 openSettings();
+                return true;
+            case R.id.refresh:
+                refresh();
                 return true;
             case R.id.logout:
                 logout();
@@ -176,6 +190,10 @@ public class HomeActivity extends Activity {
         startActivity(intent);
     }
 
+    public void refresh() {
+        runOnUiThread(run);
+    }
+
     private void addFriend() {
     }
 
@@ -194,32 +212,7 @@ public class HomeActivity extends Activity {
         startActivity(intent);
     }
 
-    public void restTest(View view) {
-        Attendees[] attendees = new Attendees[1];
-        Attendees a = new Attendees("berra", false);
-        attendees[0] = a;
-        Event event = new Event("Beach meetup", "Bettness", "11:00-16:00", "BADA!", "2015-01-08", "2015-01-06", "berra", attendees, "", "s");
-        Sender.sendEvent(event, "post");
-    }
-
-//    public void restGet(View view) {
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                try {
-//                    ClientResource client = new ClientResource("http://10.0.2.2:8080/");
-//                    Reference uri = new Reference("http://10.0.2.2:8080/events");
-//
-//                    client.setReference(uri);
-//                    client.get();
-//                } catch(Exception e) {
-//                    Log.e(TAG, e.getMessage(), e);
-//                }
-//            }
-//        }).start();
-//    }oib
-
-    public void restTestServer() {
+    public void restServer() {
         // use this to start and trigger a service
         // potentially add data to the intent
         Intent ServiceIntent = new Intent(this, RestService.class);

@@ -125,35 +125,6 @@ public class AddFriendsActivity extends Activity{
         Sender.sendEvent(event, "post");
         Intent intent = new Intent(this, HomeActivity.class);
         startActivity(intent);
-
-//        HashMap<String, String> friendsToInviteIPs = new HashMap<String, String>();
-//        try {
-//            friendsToInviteIPs = (HashMap<String, String>) InternalStorage.readObject(getApplicationContext(), "friendsIPs");
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        } catch (ClassNotFoundException e) {
-//            e.printStackTrace();
-//        }
-//        for(int i = 0; i < friendsToInviteIDs.size(); i++) {
-//            String friendToAddIP = friendsToInviteIPs.get(friendsToInviteIDs.get(i));
-//
-//            ClientResource client = new ClientResource("http://" + friendToAddIP + ":8080/events/");
-//
-//            try {
-//                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-//                ObjectMapper mapper = new ObjectMapper(new BsonFactory());
-//
-//                mapper.writeValue(baos, event);
-//
-//                ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
-//                Representation rep = new InputRepresentation(bais, org.restlet.data.MediaType.APPLICATION_OCTET_STREAM);
-//                client.post(rep);
-//                Log.i(TAG, client.getStatus().toString());
-//            } catch (IOException e) {
-//                Log.e(TAG, e.getMessage(), e);
-//            }
-//        }
-
     }
 
     private class MySimpleArrayAdapter extends ArrayAdapter<String> {
