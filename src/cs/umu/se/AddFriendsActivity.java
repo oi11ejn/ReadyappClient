@@ -123,6 +123,8 @@ public class AddFriendsActivity extends Activity{
         Date date2 = date1.getTime();
         Event event = new Event(eventTitle, eventLocation, eventDuration, eventDescription, eventDate, date2.toString(), self.getUserId() ,attendees, "IMAGE", eventTime);
         Sender.sendEvent(event, "post");
+        Intent intent = new Intent(this, HomeActivity.class);
+        startActivity(intent);
 
 //        HashMap<String, String> friendsToInviteIPs = new HashMap<String, String>();
 //        try {
