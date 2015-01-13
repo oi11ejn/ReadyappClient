@@ -67,7 +67,10 @@ public class Sender {
                             Representation rep = new InputRepresentation(bais, MediaType.APPLICATION_OCTET_STREAM);
 
                             if (method.equalsIgnoreCase("put")) {
-                                client.put(rep);
+                                //only leader putting for now, not putting to leader
+                                if(!event.getCreator().equalsIgnoreCase(attendee.getUserId())) {
+                                    client.put(rep);
+                                }
                             } else if (method.equalsIgnoreCase("post")) {
                                 client.post(rep);
                             }
@@ -110,7 +113,7 @@ public class Sender {
                     }
                     if(send) {
                         ClientResource client = new ClientResource("http://" + ips.get(event.getCreator()) + "/ready/" + ready);
-                        ReadyStatus readyStatus = new ReadyStatus(event.getEventName(), userId, ready);
+                        ReadyStatus readyStatus = new ReadyStatus(event.getEventName()+event.getCreator(), userId, ready);
                         //serialize event
                         ByteArrayOutputStream baos = new ByteArrayOutputStream();
                         ObjectMapper mapper = new ObjectMapper(new BsonFactory());

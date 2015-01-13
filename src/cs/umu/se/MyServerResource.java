@@ -24,15 +24,14 @@ public class MyServerResource extends BaseResource {
     private String ready;
 
     public void doInit() {
-        this.ready = (String) getRequest().getAttributes().get("ready");
-
 //        getVariants().add(new Variant(MediaType.APPLICATION_OCTET_STREAM));
     }
 
     @Post
     public Representation post(Representation entity) throws ResourceException {
+        this.ready = (String) getRequest().getAttributes().get("status");
         try {
-            System.out.println("JSAHDKJSA " + ready);
+            Log.d(TAG, "READY:: "+ready);
             if(ready == null) {
                 // deserialize data
                 ObjectMapper mapper = new ObjectMapper(new BsonFactory());
@@ -52,6 +51,7 @@ public class MyServerResource extends BaseResource {
                 // deserialize data
                 ObjectMapper mapper = new ObjectMapper(new BsonFactory());
                 ReadyStatus ready = mapper.readValue(entity.getStream(), ReadyStatus.class);
+                Log.d(TAG, "YOLOZ: " + ready.getUserId() + " contains " + getEvents().containsKey(ready.getEventId()));
 
                 if(getEvents().containsKey(ready.getEventId())) {
                     Attendees[] attendees = getEvents().get(ready.getEventId()).getAttendees();
@@ -78,8 +78,8 @@ public class MyServerResource extends BaseResource {
                         Sender.sendEvent(getEvents().get(ready.getEventId()), "put");
                         getResponse().setStatus(Status.SUCCESS_CREATED);
                     }
-                }
-                getResponse().setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+                } else
+                    getResponse().setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
             }
         } catch (JsonMappingException e) {
             Log.e(TAG, e.getMessage(), e);
@@ -110,6 +110,7 @@ public class MyServerResource extends BaseResource {
                 //put event
                 HashMap<String, Event> events = (HashMap<String, Event>) InternalStorage.readObject(HomeActivity.ha.getApplicationContext(), "events");
                 events.put(event.getEventName()+event.getCreator(), event);
+                InternalStorage.writeObject(HomeActivity.ha.getApplicationContext(), "events", events);
                 getResponse().setStatus(Status.SUCCESS_CREATED);
             } else {
                 getResponse().setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
