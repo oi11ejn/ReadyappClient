@@ -48,17 +48,17 @@ public class MyServerResource extends BaseResource {
                     getResponse().setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
                 }
             } else {
-//                Pattern p = Pattern.compile("[/+]", Pattern.CASE_INSENSITIVE);
-//                Matcher m = p.matcher(ready);
-//                Log.d(TAG, "String contains two / : " + m.find());
-                //splitting string into 0:eventid, 1:userid, 2:readystatus
-                String[] split = ready.split("/");
-                if(getEvents().containsKey(split[0])) {
-                    Attendees[] attendees = getEvents().get(split[0]).getAttendees();
+                //Skicka readystatus objekt ist
+                // deserialize data
+                ObjectMapper mapper = new ObjectMapper(new BsonFactory());
+                ReadyStatus ready = mapper.readValue(entity.getStream(), ReadyStatus.class);
+
+                if(getEvents().containsKey(ready.getEventId())) {
+                    Attendees[] attendees = getEvents().get(ready.getEventId()).getAttendees();
                     boolean changed = false;
                     for(Attendees attendee : attendees) {
-                        if(attendee.equals(split[1])) {
-                            if(split[2].equalsIgnoreCase("yes")) {
+                        if(attendee.equals(ready.getUserId())) {
+                            if(ready.isReady()) {
                                 if(!attendee.isReady()) {
                                     attendee.setReady(true);
                                     changed = true;
@@ -72,10 +72,10 @@ public class MyServerResource extends BaseResource {
                         }
                     }
                     if(changed) {
-                        getEvents().get(split[0]).setAttendees(attendees);
+                        getEvents().get(ready.getEventId()).setAttendees(attendees);
                         InternalStorage.writeObject(HomeActivity.ha.getApplicationContext(), "events", getEvents());
                         //TODO: PUT CHANGES TO ALL ATTENDEES
-                        Sender.send(attendees, getEvents().get(split[0]), "put");
+                        Sender.sendEvent(getEvents().get(ready.getEventId()), "put");
                         getResponse().setStatus(Status.SUCCESS_CREATED);
                     }
                 }

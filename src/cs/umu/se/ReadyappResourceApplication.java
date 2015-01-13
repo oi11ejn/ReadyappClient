@@ -36,6 +36,7 @@ public class ReadyappResourceApplication extends Application {
         // Defines a route for the resource "list of items"
         router.attach("/events", MyServerResource.class);
         router.attach("/events/ready", MyServerResource.class);
+
         return router;
     }
 

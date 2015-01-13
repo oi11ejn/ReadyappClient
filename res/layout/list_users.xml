@@ -11,10 +11,10 @@
         android:id="@+id/userList"
         android:layout_weight="0.82"
         android:layout_alignParentLeft="true"
-        android:layout_marginLeft="0dp"
+        android:layout_marginLeft="10dp"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="0dp"
-        android:layout_alignParentBottom="true"/>
+        android:layout_alignParentBottom="true"
+        android:layout_marginRight="10dp"/>
 
     <LinearLayout
         android:orientation="horizontal"
@@ -26,10 +26,10 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:id="@+id/linearLayout"
-        android:layout_marginLeft="0dp"
         android:layout_alignParentTop="true"
         android:gravity="bottom"
-        android:layout_alignParentBottom="true">
+        android:layout_alignParentBottom="true"
+        >
 
         <Button
             android:layout_width="wrap_content"

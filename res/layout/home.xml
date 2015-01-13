@@ -67,7 +67,9 @@
         android:layout_below="@+id/create_event_button"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_above="@+id/linearLayout"/>
+        android:layout_above="@+id/linearLayout"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"/>
 
     <TextView
         android:layout_width="wrap_content"

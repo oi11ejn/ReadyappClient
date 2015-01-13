@@ -199,7 +199,7 @@ public class HomeActivity extends Activity {
         Attendees a = new Attendees("berra", false);
         attendees[0] = a;
         Event event = new Event("Beach meetup", "Bettness", "11:00-16:00", "BADA!", "2015-01-08", "2015-01-06", "berra", attendees, "", "s");
-        Sender.send(attendees, event, "post");
+        Sender.sendEvent(event, "post");
     }
 
 //    public void restGet(View view) {
@@ -232,7 +232,7 @@ public class HomeActivity extends Activity {
             try {
                 self = (UserInfo) InternalStorage.readObject(getApplicationContext(), "self");
                 String ip = Utils.getIPAddress(true);
-                ip = "10.0.2.2:8080";
+                ip = "10.0.2.2:8081";
                 Log.d(TAG, "IP address for device is: " + ip);
                 try {
                     InternalStorage.writeObject(getApplicationContext(), "ip", ip);

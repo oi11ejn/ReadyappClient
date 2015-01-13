@@ -63,7 +63,7 @@ public class MainActivity extends Activity {
                     HttpHeaders requestHeader = createHeaders(username, password);
                     requestHeader.setContentType(MediaType.APPLICATION_JSON);
 
-                    //set your entity to send
+                    //set your entity
                     HttpEntity entity = new HttpEntity(requestHeader);
 
                     System.out.println("Trying to login!");

@@ -1,7 +1,6 @@
 package cs.umu.se;
 
 import android.app.Activity;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -107,10 +106,6 @@ public class AddFriendsActivity extends Activity{
                 Log.d(TAG, "Lägger ej till: " + name);
             }
         }
-        for (String id : friendsToInviteIDs) {
-            Log.d(TAG, "KOMpISAR SOM SKA ME " + id);
-        }
-
         Attendees[] attendees = new Attendees[friendsToInviteIDs.size() + 1];
         for(int i = 0; i < friendsToInviteIDs.size(); i++) {
             attendees[i] = new Attendees(friendsToInviteIDs.get(i), false);
@@ -127,7 +122,7 @@ public class AddFriendsActivity extends Activity{
         Calendar date1 = Calendar.getInstance(TimeZone.getDefault());
         Date date2 = date1.getTime();
         Event event = new Event(eventTitle, eventLocation, eventDuration, eventDescription, eventDate, date2.toString(), self.getUserId() ,attendees, "IMAGE", eventTime);
-        Sender.send(attendees, event, "post");
+        Sender.sendEvent(event, "post");
 
 //        HashMap<String, String> friendsToInviteIPs = new HashMap<String, String>();
 //        try {

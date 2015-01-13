@@ -23,13 +23,14 @@ import java.util.HashMap;
 public class Sender {
     private final static String TAG = "Sender";
 
-    public static void send(final Attendees[] attendees, final Event event, final String method) {
+    public static void sendEvent(final Event event, final String method) {
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
                     HashMap<String, String> ips = (HashMap<String, String>) InternalStorage.readObject(HomeActivity.ha.getApplicationContext(), "ips");
                     Boolean send;
+                    Attendees[] attendees = event.getAttendees();
                     for (Attendees attendee : attendees)
                         Log.d(TAG, "RECIPIENT " + attendee.getUserId());
 
@@ -81,4 +82,53 @@ public class Sender {
             }
         }).start();
     }
+
+    public static void sendReady(final Event event, final String userId, final boolean ready) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    HashMap<String, String> ips = (HashMap<String, String>) InternalStorage.readObject(HomeActivity.ha.getApplicationContext(), "ips");
+                    Boolean send = false;
+                    if (!ips.containsKey(event.getCreator())) {
+                        final String url = "https://readyappserver.herokuapp.com/ip/" + event.getCreator();
+                        RestTemplate restTemplate = new RestTemplate();
+                        restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
+                        restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+                        Authentication auth = (Authentication) InternalStorage.readObject(HomeActivity.ha.getApplicationContext(), "auth");
+                        HttpHeaders requestHeader = new HttpHeaders();
+                        requestHeader.set("Authorization", auth.getAuth());
+                        requestHeader.setContentType(org.springframework.http.MediaType.APPLICATION_JSON);
+                        HttpEntity entity = new HttpEntity(requestHeader);
+                        ResponseEntity<IP> response = restTemplate.exchange(url, HttpMethod.GET, entity, IP.class);
+                        if (response.getStatusCode().equals(HttpStatus.OK)) {
+                            ips.put(event.getCreator(), response.getBody().getIp());
+                            send = true;
+                        }
+                    } else {
+                        send = true;
+                    }
+                    if(send) {
+                        ClientResource client = new ClientResource("http://" + ips.get(event.getCreator()) + "/ready/" + ready);
+                        ReadyStatus readyStatus = new ReadyStatus(event.getEventName(), userId, ready);
+                        //serialize event
+                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                        ObjectMapper mapper = new ObjectMapper(new BsonFactory());
+                        mapper.writeValue(baos, readyStatus);
+
+                        ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+                        Representation rep = new InputRepresentation(bais, MediaType.APPLICATION_OCTET_STREAM);
+
+                        client.post(rep);
+                    }
+                } catch (ClassNotFoundException e) {
+                    Log.e(TAG, e.getMessage(), e);
+                } catch (IOException e) {
+                    Log.e(TAG, e.getMessage(), e);
+                }
+            }
+        }).start();
+    }
+
+
 }

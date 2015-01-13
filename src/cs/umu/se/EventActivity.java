@@ -23,6 +23,7 @@ public class EventActivity extends Activity {
     protected ListView friendsInEventList;
     protected ArrayList<Attendees> list;
     protected Event event;
+    protected UserInfo self;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -41,7 +42,7 @@ public class EventActivity extends Activity {
 //            public void run() {
         try {
             event  = (Event) InternalStorage.readObject(getApplicationContext(), "event");
-
+            self = (UserInfo) InternalStorage.readObject(getApplicationContext(), "self");
             TextView event_Name = (TextView) findViewById(R.id.event_name);
             TextView event_Location = (TextView) findViewById(R.id.event_location);
             TextView event_Date = (TextView) findViewById(R.id.event_date);
@@ -73,9 +74,10 @@ public class EventActivity extends Activity {
         ToggleButton ready = (ToggleButton) findViewById(R.id.ready_button);
         if(ready.isChecked()) {
             //if not creator post ready to creator
-
+            Sender.sendReady(event, self.getUserId(), true);
         } else {
             //if not creator post not ready to creator
+            Sender.sendReady(event, self.getUserId(), false);
 
         }
     }
