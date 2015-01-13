@@ -56,7 +56,7 @@ public class Sender {
                             send = true;
                         }
                         if(send) {
-                            ClientResource client = new ClientResource("http://" + ips.get(attendee.getUserId()) + "/events");
+                            ClientResource client = new ClientResource("http://" + ips.get(attendee.getUserId()) + "/events/" + event.getEventName() + event.getCreator());
                             Log.d(TAG, "CLIENT: " + ips.get(attendee.getUserId()));
                             //serialize event
                             ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -112,7 +112,7 @@ public class Sender {
                         send = true;
                     }
                     if(send) {
-                        ClientResource client = new ClientResource("http://" + ips.get(event.getCreator()) + "/ready/" + ready);
+                        ClientResource client = new ClientResource("http://" + ips.get(event.getCreator()) + "/status/" + ready);
                         ReadyStatus readyStatus = new ReadyStatus(event.getEventName()+event.getCreator(), userId, ready);
                         //serialize event
                         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -166,7 +166,7 @@ public class Sender {
                             send = true;
                         }
                         if(send) {
-                            ClientResource client = new ClientResource("http://" + ips.get(attendee.getUserId()) + "/ready/" + event.getEventName());
+                            ClientResource client = new ClientResource("http://" + ips.get(attendee.getUserId()) + "/ready/" + event.getEventName() + event.getCreator());
                             Log.d(TAG, "CLIENT: " + ips.get(attendee.getUserId()));
                             //serialize event
                             ByteArrayOutputStream baos = new ByteArrayOutputStream();

@@ -1,6 +1,7 @@
 package cs.umu.se;
 
 
+import android.os.Bundle;
 import android.util.Log;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -21,18 +22,22 @@ import java.util.HashMap;
  */
 public class MyServerResource extends BaseResource {
     private static final String TAG = "MyServerResource";
+    private String createdEvent;
     private String ready;
+    private String readyCheck;
 
     public void doInit() {
+        this.createdEvent = (String) getRequest().getAttributes().get("eventId");
+        this.ready = (String) getRequest().getAttributes().get("status");
+        this.readyCheck = (String) getRequest().getAttributes().get("eventId1");
 //        getVariants().add(new Variant(MediaType.APPLICATION_OCTET_STREAM));
     }
 
     @Post
     public Representation post(Representation entity) throws ResourceException {
-        this.ready = (String) getRequest().getAttributes().get("status");
         try {
-            Log.d(TAG, "READY:: "+ready);
-            if(ready == null) {
+            Log.d(TAG, "READY:: " + ready);
+            if(createdEvent != null) {
                 // deserialize data
                 ObjectMapper mapper = new ObjectMapper(new BsonFactory());
                 Event event = mapper.readValue(entity.getStream(), Event.class);
@@ -46,7 +51,7 @@ public class MyServerResource extends BaseResource {
                     Log.d(TAG, "Got same event again with wrong method <POST> event key:" + event.getEventName() + event.getCreator());
                     getResponse().setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
                 }
-            } else {
+            } else if(ready != null && (ready.equalsIgnoreCase("true") || ready.equalsIgnoreCase("false"))){
                 //Skicka readystatus objekt ist
                 // deserialize data
                 ObjectMapper mapper = new ObjectMapper(new BsonFactory());
@@ -78,6 +83,22 @@ public class MyServerResource extends BaseResource {
                         Sender.sendEvent(getEvents().get(ready.getEventId()), "put");
                         getResponse().setStatus(Status.SUCCESS_CREATED);
                     }
+                } else
+                    getResponse().setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+            } else if(readyCheck != null) {
+                //Skicka readystatus objekt ist
+                // deserialize data
+                ObjectMapper mapper = new ObjectMapper(new BsonFactory());
+                ReadyCheck ready = mapper.readValue(entity.getStream(), ReadyCheck.class);
+                Log.d(TAG, "ReadyCheck for: " + readyCheck + " contains timer: " + ready.getTimer());
+
+                if (getEvents().containsKey(readyCheck)) {
+                    ReadyCheckFragment fragment = new ReadyCheckFragment();
+                    Bundle args = new Bundle();
+                    args.putString("ready_check_event", getEvents().get(readyCheck).getEventName());
+                    args.putString("ready_check_event_creator", getEvents().get(readyCheck).getCreator());
+                    fragment.setArguments(args);
+                    fragment.show(HomeActivity.ha.getFragmentManager(), "ready_check");
                 } else
                     getResponse().setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
             }
