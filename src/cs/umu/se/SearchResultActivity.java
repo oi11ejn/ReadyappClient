@@ -80,8 +80,9 @@ public class SearchResultActivity extends Activity {
     }
 
     public void addFriend(View view) {
-        Log.d(TAG, "Adding " + friend.getUserId() + "as a friend");
-        new HttpAddFriendTask().execute();
+        Log.d(TAG, "Sending friend requests to " + friend.getUserId());
+        Sender.sendFriendRequest(friend.getUserId(), self.getUserId());
+//        new HttpAddFriendTask().execute();
     }
 
     private class HttpRequestTask extends AsyncTask<Void, Void, UserInfo> {

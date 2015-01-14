@@ -60,4 +60,8 @@ public class UserInfo implements Serializable {
     public boolean isYourFriend() {
         return yourFriend;
     }
+
+    public void addFriend(UserId userId) {
+        friendList[friendList.length] = userId;
+    }
 }

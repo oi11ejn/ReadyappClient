@@ -58,6 +58,14 @@
                     android:value=".HomeActivity" />
             </activity>
             <activity
+                android:name=".PendingRequestsActivity"
+                android:label="@string/pending_title"
+                android:parentActivityName=".HomeActivity" >
+                <meta-data
+                    android:name="android.support.PARENT_ACTIVITY"
+                    android:value=".HomeActivity" />
+            </activity>
+            <activity
                 android:name=".SearchActivity"
                 android:label="@string/search_title"
                 android:parentActivityName=".HomeActivity" >

@@ -6,7 +6,7 @@
     <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/create_event_button"
+            android:id="@+id/send_request_button"
             android:text="Create event"
             android:onClick="createEvent"
             android:background="#193441"
@@ -25,7 +25,7 @@
             android:id="@+id/friend_list"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/create_event_button"
+            android:layout_below="@+id/send_request_button"
             android:layout_above="@+id/linearLayout"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"/>
@@ -35,7 +35,7 @@
             android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:weightSum="1"
-            android:layout_above="@id/create_event_button"
+            android:layout_above="@id/send_request_button"
             android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"

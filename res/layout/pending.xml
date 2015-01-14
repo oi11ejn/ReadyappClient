@@ -1,54 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/userString"
-        android:layout_weight="7.96"
-        android:layout_above="@+id/firstFriend"
-        android:layout_toLeftOf="@+id/listButton"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"/>
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="List friends"
-        android:id="@+id/listButton"
-        android:onClick="list"
+        android:id="@+id/send_request_button"
+        android:text="Create request"
+        android:onClick="createRequest"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"/>
-
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/firstFriend"
-            android:layout_gravity="center_vertical"
-            android:layout_below="@+id/listButton"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignRight="@+id/listButton"
-            android:layout_alignEnd="@+id/listButton"/>
-
-    <ListView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/friend_list"
-        android:layout_below="@+id/userString"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_above="@+id/linearLayout"/>
+        android:layout_alignParentEnd="true"
+        android:background="#193441"
+        android:layout_marginRight="20dp"
+        android:textColor="#FFFFFF"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"/>
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
         android:weightSum="1"
-        android:layout_above="@id/send_request_button"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
@@ -61,7 +38,6 @@
             android:layout_height="40dp"
             android:text="Events"
             android:id="@+id/event_button"
-            android:onClick="showEvents"
             android:layout_alignTop="@+id/linearLayout"
             android:layout_alignParentLeft="true"
             android:layout_alignParentBottom="true"
@@ -74,7 +50,6 @@
             android:layout_height="40dp"
             android:id="@+id/profile_button"
             android:onClick="showProfile"
-            android:src="@drawable/ic_action_user"
             android:layout_alignTop="@+id/friend_button"
             android:layout_alignParentRight="true"
             android:layout_alignParentBottom="true"
@@ -83,4 +58,28 @@
             android:textColor="#FFFFFF"
             android:background="#193441"/>
     </LinearLayout>
+
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/request_list"
+        android:layout_below="@+id/send_request_button"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_above="@+id/linearLayout"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/no_requests"
+        android:layout_alignTop="@+id/send_request_button"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:textColor="#193441"
+        android:textSize="16dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"/>
+
 </RelativeLayout>

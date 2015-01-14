@@ -25,6 +25,7 @@ public class ReadyappResourceApplication extends Application {
         friendRequests = new ArrayList<String>();
         try {
             InternalStorage.writeObject(HomeActivity.ha.getApplicationContext(), "events", events);
+            InternalStorage.writeObject(HomeActivity.ha.getApplicationContext(), "friendRequests", friendRequests);
         } catch (IOException e) {
             Log.e("ReadyResourceApplication", e.getMessage(), e);
         }
@@ -41,7 +42,8 @@ public class ReadyappResourceApplication extends Application {
         router.attach("/events/{eventId}", MyServerResource.class);
         router.attach("/status/{status}", MyServerResource.class);
         router.attach("/ready/{eventId1}", MyServerResource.class);
-        router.attach("friends/{userId}", MyServerResource.class);
+        router.attach("/friends/{userId}", MyServerResource.class);
+        router.attach("/accept/{userId1}", MyServerResource.class);
         
         return router;
     }

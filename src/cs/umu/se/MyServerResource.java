@@ -26,12 +26,15 @@ public class MyServerResource extends BaseResource {
     private String ready;
     private String readyCheck;
     private String friendRequest;
+    private String accept;
 
     public void doInit() {
         this.createdEvent = (String) getRequest().getAttributes().get("eventId");
         this.ready = (String) getRequest().getAttributes().get("status");
         this.readyCheck = (String) getRequest().getAttributes().get("eventId1");
         this.friendRequest = (String) getRequest().getAttributes().get("userId");
+        this.accept = (String) getRequest().getAttributes().get("userId1");
+
 //        getVariants().add(new Variant(MediaType.APPLICATION_OCTET_STREAM));
     }
 
@@ -108,16 +111,28 @@ public class MyServerResource extends BaseResource {
                 ObjectMapper mapper = new ObjectMapper(new BsonFactory());
                 UserId userId = mapper.readValue(entity.getStream(), UserId.class);
 
-                if(!getFriendRequests().contains(userId)) {
+                if(!getFriendRequests().contains(userId.getUserId())) {
                     getFriendRequests().add(userId.getUserId());
                     InternalStorage.writeObject(HomeActivity.ha.getApplicationContext(), "friendRequests", getFriendRequests());
+                    getResponse().setStatus(Status.SUCCESS_CREATED);
+                } else {
+                    getResponse().setStatus(Status.SUCCESS_OK);
                 }
+            } else if(accept != null) {
+                ObjectMapper mapper = new ObjectMapper(new BsonFactory());
+                UserId userId = mapper.readValue(entity.getStream(), UserId.class);
+
+                UserInfo self = (UserInfo) InternalStorage.readObject(HomeActivity.ha.getApplicationContext(), "self");
+                self.addFriend(userId);
+                InternalStorage.writeObject(HomeActivity.ha.getApplicationContext(), "self", self);
             }
         } catch (JsonMappingException e) {
             Log.e(TAG, e.getMessage(), e);
         } catch (JsonParseException e) {
             Log.e(TAG, e.getMessage(), e);
         } catch (IOException e) {
+            Log.e(TAG, e.getMessage(), e);
+        } catch (ClassNotFoundException e) {
             Log.e(TAG, e.getMessage(), e);
         }
         return getResponseEntity();

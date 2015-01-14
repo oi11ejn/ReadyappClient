@@ -53,12 +53,8 @@ public class HomeActivity extends Activity {
         });
         events = new ArrayList<Event>();
         HashMap<String, String> ips = new HashMap<String, String>();
-        HashMap<String, Event> eventHashMap = new HashMap<String, Event>();
-        ArrayList<String> friendRequest = new ArrayList<String>();
         try {
             InternalStorage.writeObject(getApplicationContext(), "ips", ips);
-            InternalStorage.writeObject(getApplicationContext(), "events", eventHashMap);
-            InternalStorage.writeObject(getApplicationContext(), "friendRequest", friendRequest);
         } catch (IOException e) {
             Log.e(TAG, e.getMessage(), e);
         }
@@ -71,6 +67,30 @@ public class HomeActivity extends Activity {
         } catch (ClassNotFoundException e) {
             Log.e(TAG, e.getMessage(), e);
         }
+        run = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    HashMap<String, Event> eventHashMap = (HashMap<String, Event>) InternalStorage.readObject(getApplicationContext(), "events");
+                    boolean changed = false;
+                    if (!eventHashMap.isEmpty()) {
+                        for (String key : eventHashMap.keySet()) {
+                            if (!events.contains(eventHashMap.get(key))) {
+                                events.add(eventHashMap.get(key));
+                                changed = true;
+                            }
+                        }
+                        if (changed) {
+                            adapter.notifyDataSetChanged();
+                        }
+                    }
+                } catch (IOException e) {
+                    Log.e(TAG, e.getMessage(), e);
+                } catch (ClassNotFoundException e) {
+                    Log.e(TAG, e.getMessage(), e);
+                }
+            }
+        });
         new HttpRequestTask().execute();
         restServer();
     }
@@ -110,30 +130,6 @@ public class HomeActivity extends Activity {
 
         adapter = new MySimpleArrayAdapter(this, events);
         eventList.setAdapter(adapter);
-        run = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    HashMap<String, Event> eventHashMap = (HashMap<String, Event>) InternalStorage.readObject(getApplicationContext(), "events");
-                    boolean changed = false;
-                    if (!eventHashMap.isEmpty()) {
-                        for (String key : eventHashMap.keySet()) {
-                            if (!events.contains(eventHashMap.get(key))) {
-                                events.add(eventHashMap.get(key));
-                                changed = true;
-                            }
-                        }
-                        if (changed) {
-                            adapter.notifyDataSetChanged();
-                        }
-                    }
-                } catch (IOException e) {
-                    Log.e(TAG, e.getMessage(), e);
-                } catch (ClassNotFoundException e) {
-                    Log.e(TAG, e.getMessage(), e);
-                }
-            }
-        });
         runOnUiThread(run);
     }
 

@@ -46,33 +46,35 @@ public class ProfileActivity extends Activity {
     @Override
     public void onStart() {
         super.onStart();
-//        new Thread(new Runnable() {
-//            public void run() {
-                try {
-                    UserInfo self = (UserInfo) InternalStorage.readObject(getApplicationContext(), "self");
-                    TextView userId = (TextView) findViewById(R.id.user_id);
-                    TextView name = (TextView) findViewById(R.id.name);
-                    TextView lastName = (TextView) findViewById(R.id.last_name);
-                    TextView email = (TextView) findViewById(R.id.email);
-                    TextView lastOnline = (TextView) findViewById(R.id.last_online);
-                    list.clear();
-                    userId.setText(self.getUserId());
-                    name.setText("Name: " + self.getName());
-                    lastName.setText("Last name: " + self.getLastName());
-                    email.setText("Email: " + self.getEmail());
-                    lastOnline.setText("Last online at\n" + self.getLastOnline());
-                    for(UserId user : self.getFriendList()) {
-                        list.add(user.toString());
-                    }
-                    final MySimpleArrayAdapter adapter = new MySimpleArrayAdapter(getApplication(), list);
-                    friendList.setAdapter(adapter);
-                } catch (IOException e) {
-                    Log.e(TAG, e.getMessage(), e);
-                } catch (ClassNotFoundException e) {
-                    Log.e(TAG, e.getMessage(), e);
-                }
-//            }
-//        }).start();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        try {
+            UserInfo self = (UserInfo) InternalStorage.readObject(getApplicationContext(), "self");
+            TextView userId = (TextView) findViewById(R.id.user_id);
+            TextView name = (TextView) findViewById(R.id.name);
+            TextView lastName = (TextView) findViewById(R.id.last_name);
+            TextView email = (TextView) findViewById(R.id.email);
+            TextView lastOnline = (TextView) findViewById(R.id.last_online);
+            list.clear();
+            userId.setText(self.getUserId());
+            name.setText("Name: " + self.getName());
+            lastName.setText("Last name: " + self.getLastName());
+            email.setText("Email: " + self.getEmail());
+            lastOnline.setText("Last online at\n" + self.getLastOnline());
+            for(UserId user : self.getFriendList()) {
+                list.add(user.toString());
+            }
+            final MySimpleArrayAdapter adapter = new MySimpleArrayAdapter(getApplication(), list);
+            friendList.setAdapter(adapter);
+        } catch (IOException e) {
+            Log.e(TAG, e.getMessage(), e);
+        } catch (ClassNotFoundException e) {
+            Log.e(TAG, e.getMessage(), e);
+        }
+
     }
 
     @Override
@@ -93,6 +95,12 @@ public class ProfileActivity extends Activity {
             case R.id.action_settings:
                 openSettings();
                 return true;
+            case R.id.pending:
+                openPendingRequests();
+                return true;
+            case R.id.refresh:
+                refresh();
+                return true;
             case R.id.logout:
                 logout();
                 return true;
@@ -109,6 +117,15 @@ public class ProfileActivity extends Activity {
     public void openSettings() {
         Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);
+    }
+
+    private void openPendingRequests() {
+        Intent intent = new Intent(this, PendingRequestsActivity.class);
+        startActivity(intent);
+    }
+
+    public void refresh() {
+//        runOnUiThread(run);
     }
 
     private void logout() {

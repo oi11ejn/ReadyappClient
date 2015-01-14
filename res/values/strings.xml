@@ -5,7 +5,7 @@
     <string name="action_settings">Settings</string>
     <string name="action_add_friend">Add a friend</string>
     <string name="action_list_friends">List friends</string>
-    <string name="action_pending">Pending friend requests</string>
+    <string name="action_pending">Pending requests</string>
     <string name="action_refresh">Refresh</string>
     <string name="action_logout">Log out</string>
     <string name="search_title">Search</string>
@@ -14,6 +14,7 @@
     <string name="add_friend_title">Add friends</string>
     <string name="register_title">Register</string>
     <string name="settings_title">Settings</string>
+    <string name="pending_title">Pending requests</string>
     <string name="notification_title">Notification</string>
     <string name="profile_title">Profile</string>
     <string name="your_friend_title">Friends</string>
@@ -22,6 +23,9 @@
     <string name="ready_check">Are you ready for</string>
     <string name="ready">Ready</string>
     <string name="not_ready">Not ready</string>
+    <string name="dialog_request">Accept or decline request from: </string>
+    <string name="accept">Accept</string>
+    <string name="decline">Decline</string>
     <!--test-->
     <string name="id_label">The ID is</string>
     <string name="id_value">[id]</string>
