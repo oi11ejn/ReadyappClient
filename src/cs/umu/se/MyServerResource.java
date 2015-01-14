@@ -2,8 +2,6 @@ package cs.umu.se;
 
 
 import android.app.Activity;
-import android.app.ActivityManager;
-import android.content.ComponentName;
 import android.os.Bundle;
 import android.util.Log;
 import com.fasterxml.jackson.core.JsonParseException;
@@ -127,7 +125,14 @@ public class MyServerResource extends BaseResource {
                 UserId userId = mapper.readValue(entity.getStream(), UserId.class);
 
                 UserInfo self = (UserInfo) InternalStorage.readObject(HomeActivity.ha.getApplicationContext(), "self");
-                self.addFriend(userId);
+                UserId[] fl = new UserId[self.getFriendList().length+1];
+                int i = 0;
+                for (UserId id : self.getFriendList()) {
+                    fl[i] = id;
+                    i++;
+                }
+                fl[self.getFriendList().length] = userId;
+                self.setFriendList(fl);
                 InternalStorage.writeObject(HomeActivity.ha.getApplicationContext(), "self", self);
             }
         } catch (JsonMappingException e) {

@@ -1,8 +1,5 @@
 package cs.umu.se;
 
-import android.app.Activity;
-import android.app.ActivityManager;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -21,7 +18,6 @@ import org.springframework.web.client.RestTemplate;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * Created by oi11ejn on 2015-01-02.
@@ -31,11 +27,14 @@ public class HomeActivity extends MyBaseActivity {
     protected static String TAG = "HomeActivity";
     protected UserInfo self;
     protected TextView self_title;
+    protected Intent serviceIntent;
     protected ListView eventList;
     protected ArrayList<Event> events;
     protected MySimpleArrayAdapter adapter;
     protected Thread run;
     public static HomeActivity ha;
+
+
     /**
      * Called when the activity is first created.
      */
@@ -56,8 +55,10 @@ public class HomeActivity extends MyBaseActivity {
         });
         events = new ArrayList<Event>();
         HashMap<String, String> ips = new HashMap<String, String>();
+        HashMap<String, Event> events2 = new HashMap<String, Event>();
         try {
             InternalStorage.writeObject(getApplicationContext(), "ips", ips);
+            InternalStorage.writeObject(HomeActivity.ha.getApplicationContext(), "events", events2);
         } catch (IOException e) {
             Log.e(TAG, e.getMessage(), e);
         }
@@ -120,16 +121,6 @@ public class HomeActivity extends MyBaseActivity {
         Event event2 = new Event("Hackathon", "MA436", "06:00-24:00", "Hacka, prata och clasha", "2015-01-13", "2015-01-03", "berra", temp, "", "");
         events.add(event1);
         events.add(event2);
-//        try {
-//            HashMap<String, Event> eventHashMap = (HashMap<String, Event>) InternalStorage.readObject(getApplicationContext(), "events");
-//            for (String key : eventHashMap.keySet()) {
-//                events.add(eventHashMap.get(key));
-//            }
-//        } catch (IOException e) {
-//         Log.e(TAG, e.getMessage(), e);
-//        } catch (ClassNotFoundException e) {
-//         Log.e(TAG, e.getMessage(), e);
-//        }
 
         adapter = new MySimpleArrayAdapter(this, events);
         eventList.setAdapter(adapter);
@@ -207,6 +198,7 @@ public class HomeActivity extends MyBaseActivity {
     private void logout() {
         Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(intent.FLAG_ACTIVITY_CLEAR_TOP);
+        stopService(serviceIntent);
         startActivity(intent);
     }
 
@@ -228,8 +220,8 @@ public class HomeActivity extends MyBaseActivity {
     public void restServer() {
         // use this to start and trigger a service
         // potentially add data to the intent
-        Intent ServiceIntent = new Intent(this, RestService.class);
-        startService(ServiceIntent);
+        Intent serviceIntent = new Intent(this, RestService.class);
+        startService(serviceIntent);
     }
 
     private class HttpRequestTask extends AsyncTask<Void, Void, String> {
@@ -238,7 +230,7 @@ public class HomeActivity extends MyBaseActivity {
             try {
                 self = (UserInfo) InternalStorage.readObject(getApplicationContext(), "self");
                 String ip = Utils.getIPAddress(true);
-                ip = "10.0.2.2:8080";
+                ip = "10.0.2.2:8081";
                 Log.d(TAG, "IP address for device is: " + ip);
                 try {
                     InternalStorage.writeObject(getApplicationContext(), "ip", ip);

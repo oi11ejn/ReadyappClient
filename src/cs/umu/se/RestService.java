@@ -11,6 +11,7 @@ import org.restlet.data.Protocol;
  */
 public class RestService extends IntentService {
     protected static final String TAG = "RestService";
+    protected Component serverComponent;
 
     public RestService() {
         super(TAG);
@@ -20,8 +21,8 @@ public class RestService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         try {
             Log.d(TAG, "Server started");
-            Component serverComponent = new Component();
-            serverComponent.getServers().add(Protocol.HTTP, 8080);
+            serverComponent = new Component();
+            serverComponent.getServers().add(Protocol.HTTP, 8081);
 //            final Router router = new Router(serverComponent.getContext().createChildContext());
 //            router.attach("/event", MyServerResource.class);
             serverComponent.getDefaultHost().attach(new ReadyappResourceApplication());
@@ -31,4 +32,14 @@ public class RestService extends IntentService {
             Log.e("Server", e.getMessage(), e);
         }
     }
+
+//    @Override
+//    public void onDestroy() {
+        //All clients have unbound with unbindService()
+//        try {
+//            serverComponent.stop();
+//        } catch (Exception e) {
+//            Log.e(TAG, e.getMessage(), e);
+//        }
+//    }
 }

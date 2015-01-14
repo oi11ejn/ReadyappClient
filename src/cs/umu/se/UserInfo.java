@@ -61,7 +61,7 @@ public class UserInfo implements Serializable {
         return yourFriend;
     }
 
-    public void addFriend(UserId userId) {
-        friendList[friendList.length] = userId;
+    public void setFriendList(UserId[] friendList) {
+        this.friendList = friendList;
     }
 }

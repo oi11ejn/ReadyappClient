@@ -1,6 +1,5 @@
 package cs.umu.se;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -133,6 +132,8 @@ public class SearchResultActivity extends MyBaseActivity {
     public void addFriend(View view) {
         Log.d(TAG, "Sending friend requests to " + friend.getUserId());
         Sender.sendFriendRequest(friend.getUserId(), self.getUserId());
+        Intent intent = new Intent(this, SearchActivity.class);
+        startActivity(intent);
 //        new HttpAddFriendTask().execute();
     }
 

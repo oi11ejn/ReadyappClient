@@ -1,6 +1,5 @@
 package cs.umu.se;
 
-import android.app.Activity;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.content.Intent;
@@ -189,7 +188,16 @@ public class PendingRequestsActivity extends MyBaseActivity {
             new HttpAddFriendTask().execute();
             Sender.sendAnswer(yesOrNo, friendId, self.getUserId());
         } else {
-
+            try {
+                friendRequests = (ArrayList<String>) InternalStorage.readObject(getApplicationContext(), "friendRequests");
+                friendRequests.remove(friendId);
+                InternalStorage.writeObject(getApplicationContext(), "friendRequests", friendRequests);
+                adapter.notifyDataSetChanged();
+            } catch (IOException e) {
+                Log.e(TAG, e.getMessage(), e);
+            } catch (ClassNotFoundException e) {
+                Log.e(TAG, e.getMessage(), e);
+            }
         }
     }
 
