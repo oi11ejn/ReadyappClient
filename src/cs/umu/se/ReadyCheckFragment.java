@@ -19,7 +19,7 @@ public class ReadyCheckFragment extends DialogFragment{
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         // Use the Builder class for convenient dialog construction
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage(R.string.ready_check + " " + this.getArguments().getString("ready_check_event") + "?")
+        builder.setMessage("Are you ready for " + this.getArguments().getString("ready_check_event") + "?")
                 .setPositiveButton(R.string.ready, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         readyCheck(true);

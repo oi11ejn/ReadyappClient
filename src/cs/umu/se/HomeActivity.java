@@ -103,25 +103,7 @@ public class HomeActivity extends MyBaseActivity {
     public void onStart() {
         super.onStart();
         //TODO: Add current events
-        //Lägger till påhittade tills vidare
-        //String eventName, String location, String duration, String description, String date, String created, Attendees[] attendees, String eventImage
-        Attendees[] temp = new Attendees[9];
-        for (int i = 0; i < 9; i++) {
-            Attendees member = new Attendees();
-            member.setUserId("stefan" + i);
-            if ((i % 2) == 0) {
-                member.setReady(true);
-            } else {
-                member.setReady(false);
-            }
-            temp[i] = member;
-        }
-        events.clear();
-        Event event1 = new Event("Beach meetup", "Bettness", "11:00-16:00", "BADA!f sf asf safd sadf safd assdf saf saf asfd asdf sad fsa", "2015-01-08", "2015-01-06", "berra", temp, "", "");
-        Event event2 = new Event("Hackathon", "MA436", "06:00-24:00", "Hacka, prata och clasha", "2015-01-13", "2015-01-03", "berra", temp, "", "");
-        events.add(event1);
-        events.add(event2);
-
+//        events.clear();
         adapter = new MySimpleArrayAdapter(this, events);
         eventList.setAdapter(adapter);
         runOnUiThread(run);
@@ -230,7 +212,7 @@ public class HomeActivity extends MyBaseActivity {
             try {
                 self = (UserInfo) InternalStorage.readObject(getApplicationContext(), "self");
                 String ip = Utils.getIPAddress(true);
-                ip = "10.0.2.2:8081";
+                ip = "10.0.2.2:8080";
                 Log.d(TAG, "IP address for device is: " + ip);
                 try {
                     InternalStorage.writeObject(getApplicationContext(), "ip", ip);
