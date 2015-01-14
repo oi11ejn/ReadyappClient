@@ -5,9 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
 import android.widget.*;
 
 import java.io.IOException;
@@ -16,7 +14,7 @@ import java.util.*;
 /**
  * Created by oi11msd on 2015-01-08.
  */
-public class AddFriendsActivity extends Activity{
+public class AddFriendsActivity extends MyBaseActivity{
     protected static String TAG = "AddFriendsActivity";
     protected ListView friends;
     protected ArrayList<String> list;
@@ -57,21 +55,52 @@ public class AddFriendsActivity extends Activity{
         }
         final MySimpleArrayAdapter adapter = new MySimpleArrayAdapter(getApplication(), list);
         friends.setAdapter(adapter);
-
-//        friends.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view,
-//                                    final int position, long id) {
-//                //TODO: GOTO -> EVENT
-//                CheckBox cBox = (CheckBox)view;
-//                cBox.setChecked();
-//
-//                adapter.getView(position, parent, parent);
-//            }
-//        });
-//            }
-//        }).start();
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu items for use in the action bar
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_actions, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle presses on the action bar items
+        switch (item.getItemId()) {
+            case R.id.action_search:
+                openSearch();
+                return true;
+            case R.id.action_settings:
+                openSettings();
+                return true;
+//            case R.id.refresh:
+//                refresh();
+//                return true;
+            case R.id.logout:
+                logout();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    public void openSearch() {
+        Intent intent = new Intent(this, SearchActivity.class);
+        startActivity(intent);
+    }
+
+    public void openSettings() {
+        Intent intent = new Intent(this, SettingsActivity.class);
+        startActivity(intent);
+    }
+
+    private void logout() {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+    }
+
 
     public void showProfile(View view) {
         Intent intent = new Intent(this, ProfileActivity.class);
@@ -83,6 +112,10 @@ public class AddFriendsActivity extends Activity{
         startActivity(intent);
     }
 
+    public void showContacts(View view) {
+        Intent intent = new Intent(this, MyFriendsActivity.class);
+        startActivity(intent);
+    }
 
     public void createEvent(View view) {
         String eventTitle = getIntent().getStringExtra("title");

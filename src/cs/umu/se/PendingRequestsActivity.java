@@ -23,7 +23,7 @@ import java.util.ArrayList;
 /**
  * Created by oi11ejn on 2015-01-13.
  */
-public class PendingRequestsActivity extends Activity {
+public class PendingRequestsActivity extends MyBaseActivity {
 
     private final static String TAG = "PendingRequestsActivity";
     protected UserInfo self;
@@ -170,6 +170,11 @@ public class PendingRequestsActivity extends Activity {
 
     public void showEvents(View view) {
         Intent intent = new Intent(this, HomeActivity.class);
+        startActivity(intent);
+    }
+
+    public void showContacts(View view) {
+        Intent intent = new Intent(this, MyFriendsActivity.class);
         startActivity(intent);
     }
 

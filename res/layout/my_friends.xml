@@ -11,7 +11,7 @@
         android:layout_alignParentLeft="true"
         android:layout_marginLeft="10dp"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="10dp"/>
+        android:layout_marginTop="10dp" android:layout_alignParentRight="true"/>
     <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"

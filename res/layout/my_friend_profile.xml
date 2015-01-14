@@ -97,44 +97,50 @@
         android:layout_marginLeft="10dp"/>
 
     <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:weightSum="1"
-        android:layout_above="@id/send_request_button"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:id="@+id/linearLayout">
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:text="Events"
-            android:id="@+id/event_button"
-            android:onClick="showEvents"
-            android:layout_alignTop="@+id/linearLayout"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="1"
+            android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentBottom="true"
-            android:layout_weight="0.50"
-            android:background="#193441"
-            android:textColor="#FFFFFF"/>
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:id="@+id/profile_button"
-            android:onClick="showProfile"
-            android:src="@drawable/ic_action_user"
-            android:layout_alignTop="@+id/friend_button"
+            android:layout_alignParentStart="true"
             android:layout_alignParentRight="true"
-            android:layout_alignParentBottom="true"
-            android:text="Profile"
-            android:layout_weight="0.50"
-            android:textColor="#FFFFFF"
-            android:background="#193441"/>
+            android:layout_alignParentEnd="true"
+            android:id="@+id/linearLayout">
+
+        <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/event_button"
+                android:onClick="showEvents"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentBottom="true"
+                android:background="@drawable/btn_menu_events_normal"
+                android:adjustViewBounds="true"
+                android:layout_weight="0.33"
+                android:baselineAlignBottom="true"/>
+
+        <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/contact_button"
+                android:onClick="showContacts"
+                android:background="@drawable/btn_menu_contacts_normal"
+                android:adjustViewBounds="true"
+                android:clickable="true"
+                android:layout_weight="0.33"
+                android:baselineAlignBottom="true"/>
+        <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/profile_button"
+                android:onClick="showProfile"
+                android:background="@drawable/btn_menu_profile_normal"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentLeft="true"
+                android:adjustViewBounds="true"
+                android:layout_weight="0.33"
+                android:baselineAlignBottom="true"/>
     </LinearLayout>
 
     <Button

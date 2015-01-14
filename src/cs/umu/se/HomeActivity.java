@@ -1,6 +1,8 @@
 package cs.umu.se;
 
 import android.app.Activity;
+import android.app.ActivityManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -19,11 +21,12 @@ import org.springframework.web.client.RestTemplate;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by oi11ejn on 2015-01-02.
  */
-public class HomeActivity extends Activity {
+public class HomeActivity extends MyBaseActivity {
 
     protected static String TAG = "HomeActivity";
     protected UserInfo self;
@@ -203,6 +206,7 @@ public class HomeActivity extends Activity {
 
     private void logout() {
         Intent intent = new Intent(this, MainActivity.class);
+        intent.addFlags(intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }
 
@@ -213,6 +217,11 @@ public class HomeActivity extends Activity {
 
     public void showProfile(View view) {
         Intent intent = new Intent(this, ProfileActivity.class);
+        startActivity(intent);
+    }
+
+    public void showContacts(View view) {
+        Intent intent = new Intent(this, MyFriendsActivity.class);
         startActivity(intent);
     }
 

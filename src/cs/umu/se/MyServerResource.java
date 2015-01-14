@@ -1,6 +1,9 @@
 package cs.umu.se;
 
 
+import android.app.Activity;
+import android.app.ActivityManager;
+import android.content.ComponentName;
 import android.os.Bundle;
 import android.util.Log;
 import com.fasterxml.jackson.core.JsonParseException;
@@ -103,7 +106,8 @@ public class MyServerResource extends BaseResource {
                     args.putString("ready_check_event", getEvents().get(readyCheck).getEventName());
                     args.putString("ready_check_event_creator", getEvents().get(readyCheck).getCreator());
                     fragment.setArguments(args);
-                    fragment.show(HomeActivity.ha.getFragmentManager(), "ready_check");
+                    Activity currentActivity = ((ReadyApp)HomeActivity.ha.getApplicationContext()).getCurrentActivity();
+                    fragment.show(currentActivity.getFragmentManager(), "ready_check");
                     getResponse().setStatus(Status.SUCCESS_OK);
                 } else
                     getResponse().setStatus(Status.CLIENT_ERROR_BAD_REQUEST);

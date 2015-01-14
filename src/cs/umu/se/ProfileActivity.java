@@ -17,7 +17,7 @@ import java.util.ArrayList;
 /**
  * Created by oi11ejn on 2015-01-05.
  */
-public class ProfileActivity extends Activity {
+public class ProfileActivity extends MyBaseActivity {
     public static final String EXTRA_MESSAGE = "cs.umu.se.MESSAGE";
     protected static final String TAG = "ProfileActivity";
     protected ListView friendList;
@@ -98,9 +98,9 @@ public class ProfileActivity extends Activity {
             case R.id.pending:
                 openPendingRequests();
                 return true;
-            case R.id.refresh:
-                refresh();
-                return true;
+//            case R.id.refresh:
+//                refresh();
+//                return true;
             case R.id.logout:
                 logout();
                 return true;
@@ -124,9 +124,9 @@ public class ProfileActivity extends Activity {
         startActivity(intent);
     }
 
-    public void refresh() {
+//    public void refresh() {
 //        runOnUiThread(run);
-    }
+//    }
 
     private void logout() {
         Intent intent = new Intent(this, MainActivity.class);

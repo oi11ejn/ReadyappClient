@@ -18,7 +18,7 @@ import java.util.HashMap;
 /**
  * Created by oi11msd on 2015-01-07.
  */
-public class EventActivity extends Activity {
+public class EventActivity extends MyBaseActivity {
 
     private final static String TAG = "EventActivity";
 
@@ -28,6 +28,7 @@ public class EventActivity extends Activity {
     protected UserInfo self;
     protected MySimpleArrayAdapter adapter;
     protected Thread run;
+    protected ToggleButton readyButton;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -37,6 +38,7 @@ public class EventActivity extends Activity {
 
         friendsInEventList = (ListView) findViewById(R.id.friend_in_event);
         list = new ArrayList<Attendees>();
+
     }
 
     @Override
@@ -50,6 +52,7 @@ public class EventActivity extends Activity {
             TextView event_Date = (TextView) findViewById(R.id.event_date);
             TextView event_Duration = (TextView) findViewById(R.id.event_duration);
             TextView event_Description = (TextView) findViewById(R.id.event_description);
+            readyButton = (ToggleButton) findViewById(R.id.ready_button);
             list.clear();
             event_Name.setText(event.getEventName());
             event_Location.setText("Location: " + event.getLocation());
@@ -59,6 +62,13 @@ public class EventActivity extends Activity {
 
             Attendees[] attendees = event.getAttendees();
             for(Attendees attendee : attendees) {
+                if(attendee.getUserId().equals(self.getUserId())) {
+                    if(attendee.isReady()) {
+                        readyButton.setChecked(true);
+                    } else {
+                        readyButton.setChecked(false);
+                    }
+                }
                 list.add(attendee);
             }
         } catch (IOException e) {
@@ -89,6 +99,13 @@ public class EventActivity extends Activity {
                         list.clear();
                         event = eventHashMap.get(event.getEventName()+event.getCreator());
                         for(Attendees attendee : attendees2) {
+                            if(attendee.getUserId().equals(self.getUserId())) {
+                                if(attendee.isReady()) {
+                                    readyButton.setChecked(true);
+                                } else {
+                                    readyButton.setChecked(false);
+                                }
+                            }
                             list.add(attendee);
                         }
                         adapter.notifyDataSetChanged();
@@ -152,8 +169,7 @@ public class EventActivity extends Activity {
     }
 
     public void sendReady(View view) {
-        ToggleButton ready = (ToggleButton) findViewById(R.id.ready_button);
-        if(ready.isChecked()) {
+        if(readyButton.isChecked()) {
             //if not creator post ready to creator
             Sender.sendReady(event, self.getUserId(), true);
         } else {
@@ -167,13 +183,13 @@ public class EventActivity extends Activity {
         Sender.sendReadyCheck(event);
     }
 
-    public void showEvents(View view) {
-        Intent intent = new Intent(this, HomeActivity.class);
+    public void showProfile(View view) {
+        Intent intent = new Intent(this, ProfileActivity.class);
         startActivity(intent);
     }
 
-    public void showProfile(View view) {
-        Intent intent = new Intent(this, ProfileActivity.class);
+    public void showContacts(View view) {
+        Intent intent = new Intent(this, MyFriendsActivity.class);
         startActivity(intent);
     }
 

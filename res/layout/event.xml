@@ -16,9 +16,11 @@
             android:textColor="#FFFFFF"
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
+            android:layout_toRightOf="@+id/event_image"
             android:layout_marginRight="10dp"
             android:layout_marginBottom="10dp"
             android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"/>
 
@@ -33,16 +35,17 @@
             android:scaleType="centerCrop"
             android:minHeight="150dp"
             android:minWidth="150dp"
-            android:layout_marginLeft="10dp"/>
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"/>
 
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/event_name"
-            android:layout_alignParentTop="true"
             android:layout_alignParentRight="true"
             android:layout_toRightOf="@+id/event_image"
-            android:layout_toEndOf="@+id/event_image"
+            android:layout_toEndOf="@+id/initiate_ready_check"
+            android:layout_below="@+id/initiate_ready_check"
             android:textSize="16dp"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="10dp"/>
@@ -78,7 +81,7 @@
             android:layout_alignParentRight="true"
             android:layout_toRightOf="@+id/event_image"
             android:layout_toEndOf="@+id/event_image"
-            android:layout_below="@+id/event_date"
+            android:layout_below="@+id/event_image"
             android:textSize="16dp"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="10dp"/>
@@ -88,8 +91,8 @@
             android:layout_height="wrap_content"
             android:id="@+id/event_description"
             android:layout_alignParentRight="true"
-            android:layout_toRightOf="@+id/event_image"
-            android:layout_toEndOf="@+id/event_image"
+            android:layout_toRightOf="@+id/ready_button"
+            android:layout_toEndOf="@+id/ready_button"
             android:layout_below="@+id/event_duration"
             android:textSize="16dp"
             android:layout_marginTop="10dp"
@@ -106,54 +109,64 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:checked="false"
-                android:layout_marginLeft="10dp"/>
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"/>
 
     <ListView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/friend_in_event"
             android:layout_centerHorizontal="true"
-            android:layout_below="@+id/ready_button"
+            android:layout_below="@+id/event_description"
             android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"/>
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"/>
 
-    <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:weightSum="1"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:id="@+id/linearLayout">
-
-        <Button
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:text="Events"
-                android:id="@+id/event_button"
-                android:onClick="showEvents"
-                android:layout_alignTop="@+id/linearLayout"
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:weightSum="1"
+                android:layout_alignParentBottom="true"
                 android:layout_alignParentLeft="true"
-                android:layout_alignParentBottom="true"
-                android:layout_weight="0.50"
-                android:background="#193441"
-                android:textColor="#FFFFFF"/>
-
-        <Button
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:id="@+id/profile_button"
-                android:onClick="showProfile"
-                android:layout_alignTop="@+id/friend_button"
+                android:layout_alignParentStart="true"
                 android:layout_alignParentRight="true"
-                android:layout_alignParentBottom="true"
-                android:text="Profile"
-                android:layout_weight="0.50"
-                android:textColor="#FFFFFF"
-                android:background="#193441"/>
-    </LinearLayout>
+                android:layout_alignParentEnd="true"
+                android:id="@+id/linearLayout">
+
+                <ImageButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/event_button"
+                        android:onClick="showEvents"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentBottom="true"
+                        android:background="@drawable/btn_menu_events_normal"
+                        android:adjustViewBounds="true"
+                        android:layout_weight="0.33"
+                        android:baselineAlignBottom="true"/>
+
+                <ImageButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/contact_button"
+                        android:onClick="showContacts"
+                        android:background="@drawable/btn_menu_contacts_normal"
+                        android:adjustViewBounds="true"
+                        android:clickable="true"
+                        android:layout_weight="0.33"
+                        android:baselineAlignBottom="true"/>
+                <ImageButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/profile_button"
+                        android:onClick="showProfile"
+                        android:background="@drawable/btn_menu_profile_normal"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentLeft="true"
+                        android:adjustViewBounds="true"
+                        android:layout_weight="0.33"
+                        android:baselineAlignBottom="true"/>
+        </LinearLayout>
 
 </RelativeLayout>
